@@ -4,7 +4,50 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1>Hello AgGrid</h1>
+
+<div id="grid" style="height: 600px;width:800px;" class="ag-theme-balham"></div>
+
+@section Scripts {
+
+    <script type="text/javascript" charset="utf-8">
+        // specify the columns
+        var columnDefs = [
+            { headerName: "登録日", field: "RegistrationDate" },
+            { headerName: "ユーザーID", field: "UserID" },
+            { headerName: "氏名", field: "Name" },
+            { headerName: "性別", field: "Gender" },
+            { headerName: "年齢", field: "Age" },
+            { headerName: "生年月日", field: "Birthday" },
+        ];
+
+        // let the grid know which columns to use
+        var gridOptions = {
+            columnDefs: columnDefs,
+            defaultColDef: {
+                sortable: true,
+                filter: true
+            },
+            rowClassRules: {
+                // row style function
+                'bigexpense-warning': function (params) {
+                    var numExpense = params.data.Amount;
+                    return numExpense > 20 && numExpense <= 50;
+                },
+                // row style expression
+                'bigexpense-breach': 'data.Amount > 50',
+                'bigexpense-ok': 'data.Amount <=20'
+            }
+        };
+
+        // lookup the container we want the Grid to use
+        var eGridDiv = document.querySelector('#grid');
+
+        // create the grid passing in the div to use together with the columns & data we want to use
+        new agGrid.Grid(eGridDiv, gridOptions);
+
+        var data = @Html.Raw(Json.Serialize(@Model.DepositList));
+        gridOptions.api.setRowData(data);
+
+    </script>
+}
