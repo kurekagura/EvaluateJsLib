@@ -4,3 +4,37 @@
 }
 
 <h1>Home</h1>
+
+<table id="table"></table>
+
+@section Scripts {
+
+    <script type="text/javascript" charset="utf-8">
+
+        var jsonObj = @Html.Raw(Json.Serialize(@Model.DepositList));
+
+        $('#table').bootstrapTable({
+            columns: [{
+                field: 'RegistrationDate',
+                title: '登録日'
+            }, {
+                field: 'UserID',
+                title: 'ユーザーID'
+            }, {
+                field: 'Name',
+                title: '氏名'
+            }, {
+                field: 'Gender',
+                title: '性別'
+            }, {
+                field: 'Age',
+                title: '年齢'
+            }, {
+                field: 'Birthday',
+                title: '生年月日'
+            }],
+            data: jsonObj
+        })
+
+    </script>
+}

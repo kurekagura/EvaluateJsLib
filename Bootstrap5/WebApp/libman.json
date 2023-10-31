@@ -16,6 +16,18 @@
         "icons/database.svg",
         "icons/house.svg"
       ]
+    },
+    {
+      "library": "bootstrap-table@1.22.1",
+      "destination": "wwwroot/lib/bootstrap-table/",
+      "files": [
+        "dist/locale/bootstrap-table-ja-JP.js",
+        "dist/locale/bootstrap-table-ja-JP.min.js",
+        "dist/bootstrap-table.css",
+        "dist/bootstrap-table.js",
+        "dist/bootstrap-table.min.css",
+        "dist/bootstrap-table.min.js"
+      ]
     }
   ]
 }
