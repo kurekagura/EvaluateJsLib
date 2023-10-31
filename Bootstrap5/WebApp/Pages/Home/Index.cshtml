@@ -60,5 +60,14 @@
             data: jsonObj
         })
 
+        const refreshBtn = document.getElementsByName("refresh")[0]; // ボタンを取得する際、[0]を使って配列から要素を取得
+
+        function handleClick() {
+            window.location.reload();
+        }
+
+        refreshBtn.addEventListener("click", handleClick);
+
+
     </script>
 }
