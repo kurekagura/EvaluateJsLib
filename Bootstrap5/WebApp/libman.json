@@ -13,6 +13,7 @@
         "font/fonts/bootstrap-icons.woff2",
         "font/bootstrap-icons.css",
         "font/bootstrap-icons.min.css",
+        "icons/database.svg",
         "icons/house.svg"
       ]
     }
