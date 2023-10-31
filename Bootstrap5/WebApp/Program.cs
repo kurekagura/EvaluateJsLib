@@ -16,8 +16,20 @@ namespace WebApp
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+            {
+                //options.SignIn.RequireConfirmedAccount = true;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                //設定しても無効？（6文字以上が要求される）。UI側検証によりガードされている？
+                options.Password.RequiredLength = 6;
+            }).AddEntityFrameworkStores<ApplicationDbContext>();
+
             builder.Services.AddRazorPages();
 
             var app = builder.Build();
@@ -35,6 +47,7 @@ namespace WebApp
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapRazorPages();
