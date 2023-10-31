@@ -13,6 +13,9 @@
         "font/fonts/bootstrap-icons.woff2",
         "font/bootstrap-icons.css",
         "font/bootstrap-icons.min.css",
+        "icons/clipboard-check.svg",
+        "icons/cloud-upload.svg",
+        "icons/cpu.svg",
         "icons/database.svg",
         "icons/house.svg"
       ]
