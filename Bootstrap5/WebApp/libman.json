@@ -83,6 +83,17 @@
         "dist/js/bootstrap.min.js.map",
         "LICENSE"
       ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "jquery@3.6.0",
+      "destination": "wwwroot/lib/jquery/",
+      "files": [
+        "dist/jquery.js",
+        "dist/jquery.min.js",
+        "dist/jquery.min.map",
+        "LICENSE.txt"
+      ]
     }
   ]
 }
