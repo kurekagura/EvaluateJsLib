@@ -1,0 +1,56 @@
+﻿@page
+@model WebApp.Pages.Table1.IndexModel
+@{
+}
+
+<h1>Home</h1>
+
+<table id="table"
+       data-click-to-select="true"
+       data-pagination="true"
+       data-id-field="UserID"
+       @* ページ件数pageSizeとあわせる *@
+       data-page-list="[5]"
+       >
+</table>
+
+@section Scripts {
+
+    <script type="text/javascript" charset="utf-8">
+
+        var jsonObj = @Html.Raw(Json.Serialize(@Model.DepositList));
+
+        $('#table').bootstrapTable({
+            columns: [{
+                field: 'RegistrationDate',
+                title: '登録日'
+            }, {
+                field: 'UserID',
+                title: 'ユーザーID'
+            }, {
+                field: 'Name',
+                title: '氏名'
+            }, {
+                field: 'Gender',
+                title: '性別'
+            }, {
+                field: 'Age',
+                title: '年齢'
+            }, {
+                field: 'Birthday',
+                title: '生年月日'
+            }],
+            pageSize: 5,
+            data: jsonObj
+        })
+
+        const refreshBtn = document.getElementsByName("refresh")[0]; // ボタンを取得する際、[0]を使って配列から要素を取得
+
+        function handleClick() {
+            window.location.reload();
+        }
+
+        refreshBtn.addEventListener("click", handleClick);
+
+    </script>
+}
