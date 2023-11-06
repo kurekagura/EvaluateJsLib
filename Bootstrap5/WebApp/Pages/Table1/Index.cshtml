@@ -39,18 +39,26 @@
             }, {
                 field: 'Birthday',
                 title: '生年月日'
+            }, {
+                title: '操作', // カスタム列のタイトル
+                formatter: deleteButtonFormatter // カスタム列のフォーマッター関数を指定
             }],
             pageSize: 5,
             data: jsonObj
         })
 
-        const refreshBtn = document.getElementsByName("refresh")[0]; // ボタンを取得する際、[0]を使って配列から要素を取得
-
-        function handleClick() {
-            window.location.reload();
+        function deleteButtonFormatter(value, row, index) {
+            // 削除ボタンを含むHTMLを生成
+            return '<button class="btn btn-danger" onclick="deleteRow(' + index + ')">削除</button>';
         }
 
-        refreshBtn.addEventListener("click", handleClick);
+        function deleteRow(index) {
+            // indexに基づいて行を削除するロジックを実装
+            // 例: jsonObjからデータを削除し、テーブルを更新する
+            jsonObj.splice(index, 1);
+            $('#table').bootstrapTable('load', jsonObj);
+        }
+
 
     </script>
 }
