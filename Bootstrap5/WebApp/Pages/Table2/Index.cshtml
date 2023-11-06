@@ -3,15 +3,26 @@
 @{
 }
 
+@section Styles{
+    <style>
+        .confirmTableHeader {
+            --bs-table-bg: #fdd0d0;
+            font-weight: 600;
+        }
+
+        tr.custom--success td {
+            background-color: #FF0000;
+        }
+    </style>
+}
 <h1>Home</h1>
 
 <table id="table"
        data-click-to-select="true"
        data-pagination="true"
        data-id-field="UserID"
-       @* ページ件数pageSizeとあわせる *@
-       data-page-list="[5]"
-       >
+@* ページ件数pageSizeとあわせる *@
+       data-page-list="[5]">
 </table>
 
 @section Scripts {
@@ -39,25 +50,15 @@
             }, {
                 field: 'Birthday',
                 title: '生年月日'
-            }, {
-                title: '操作', // カスタム列のタイトル
-                formatter: deleteButtonFormatter // カスタム列のフォーマッター関数を指定
             }],
             pageSize: 5,
+            clickToSelect: true, // 行の選択を有効にする
             data: jsonObj
+        }).on('click-row.bs.table', function (e, row, $element) {
+            console.log('click-row.bs.table!!', row.UserID);
+            $('.custom--success').removeClass('custom--success');
+            $($element).addClass('custom--success');
         });
-
-        function deleteButtonFormatter(value, row, index) {
-            // 削除ボタンを含むHTMLを生成
-            return '<button class="btn btn-danger" onclick="deleteRow(' + index + ')">削除</button>';
-        }
-
-        function deleteRow(index) {
-            // indexに基づいて行を削除するロジックを実装
-            // 例: jsonObjからデータを削除し、テーブルを更新する
-            jsonObj.splice(index, 1);
-            $('#table').bootstrapTable('load', jsonObj);
-        }
 
     </script>
 }

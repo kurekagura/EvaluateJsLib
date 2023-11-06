@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap-table/dist/bootstrap-table.min.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true" />
+    @RenderSection("Styles", required: false)
 </head>
 <body>
     <div class="container-fluid">
@@ -50,7 +51,17 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link align-middle px-0" asp-area="" asp-page="/Table1/Index">
-                                <i class="fs-4 bi-table"></i><span class="ms-1 d-none d-sm-inline">Table1</span>
+                                <i class="fs-4 bi-table"></i><span class="ms-1 d-none d-sm-inline">Table1(delete row)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link align-middle px-0" asp-area="" asp-page="/Table2/Index">
+                                <i class="fs-4 bi-table"></i><span class="ms-1 d-none d-sm-inline">Table2(SelectRow)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link align-middle px-0" asp-area="" asp-page="/Table3/Index">
+                                <i class="fs-4 bi-table"></i><span class="ms-1 d-none d-sm-inline">Table3(checkobx)</span>
                             </a>
                         </li>
                     </ul>
