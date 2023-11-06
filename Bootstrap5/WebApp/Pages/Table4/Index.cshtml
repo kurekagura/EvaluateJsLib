@@ -1,0 +1,94 @@
+﻿@page
+@using System.Text.Json;
+@model WebApp.Pages.Table4.IndexModel
+@{
+}
+
+<table id="table"
+       data-click-to-select="true"
+       data-pagination="true"
+       data-id-field="UserID"
+@* ページ件数pageSizeとあわせる *@
+       data-page-list="[5]">
+</table>
+
+@{
+    var csJsonStr = JsonSerializer.Serialize(Model.Deposits, new JsonSerializerOptions { PropertyNameCaseInsensitive = false });
+}
+
+@section Scripts {
+
+    <script type="text/javascript" charset="utf-8">
+
+        var jsonObj = @Html.Raw(csJsonStr);
+        console.log(jsonObj);
+
+        $('#table').bootstrapTable({
+            columns: [{
+                field: '@nameof(Dto.DtoDeposit.RegistrationDate)',
+                title: '@Html.DisplayNameFor(m => m.Deposits[0].RegistrationDate)'
+            }, {
+                field: '@nameof(Dto.DtoDeposit.UserID)',
+                title: '@Html.DisplayNameFor(m => m.Deposits[0].UserID)'
+            }, {
+                field: '@nameof(Dto.DtoDeposit.Name)',
+                title: '@Html.DisplayNameFor(m => m.Deposits[0].Name)'
+            }, {
+                field: '@nameof(Dto.DtoDeposit.Gender)',
+                title: '@Html.DisplayNameFor(m => m.Deposits[0].Gender)'
+            }, {
+                field: '@nameof(Dto.DtoDeposit.Age)',
+                title: '@Html.DisplayNameFor(m => m.Deposits[0].Age)'
+            }, {
+                field: '@nameof(Dto.DtoDeposit.Birthday)',
+                title: '@Html.DisplayNameFor(m => m.Deposits[0].Birthday)'
+            }],
+            pageSize: 5,
+            clickToSelect: true, // 行の選択を有効にする
+            singleSelect: true, // 一つの行しか選択できないようにする
+            data: jsonObj
+        }).on('check.bs.table', function (e, row) {
+            // 行がチェックされたときの処理
+            console.log('check.bs.table:', row);
+            $('#idSelectBtn').prop('disabled', false);
+        }).on('uncheck.bs.table', function (e, row) {
+            // 行のチェックが解除されたときの処理
+            console.log('uncheck.bs.table:', row);
+            $('#idSelectBtn').prop('disabled', true);
+        }).on('page-change.bs.table', function (e, number, size) {
+            // ページが変更されたときの処理
+            console.log('page-change.bs.table:', number);
+            console.log('1ページあたりの行数:', size);
+            $('#idSelectBtn').prop('disabled', true); // ボタンを活性化
+        });
+
+    </script>
+}
+
+<table>
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(m => m.Deposits[0].RegistrationDate)</th>
+            <th>@Html.DisplayNameFor(m => m.Deposits[0].UserID)</th>
+            <th>@Html.DisplayNameFor(m => m.Deposits[0].Name)</th>
+            <th>@Html.DisplayNameFor(m => m.Deposits[0].Gender)</th>
+            <th>@Html.DisplayNameFor(m => m.Deposits[0].Age)</th>
+            <th>@Html.DisplayNameFor(m => m.Deposits[0].Total)</th>
+            <th>@Html.DisplayNameFor(m => m.Deposits[0].Birthday)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var deposit in Model.Deposits)
+        {
+            <tr>
+                <td>@deposit.RegistrationDate</td>
+                <td>@deposit.UserID</td>
+                <td>@deposit.Name</td>
+                <td>@deposit.Gender</td>
+                <td>@deposit.Age</td>
+                <td>@deposit.Total</td>
+                <td>@deposit.Birthday</td>
+            </tr>
+        }
+    </tbody>
+</table>

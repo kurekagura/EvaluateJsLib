@@ -25,6 +25,8 @@ namespace WebApp.Pages.Table3
             var jsonStr = System.IO.File.ReadAllText(jsonPath);
             DepositList = JsonSerializer.Deserialize<List<Deposit>>(jsonStr) ?? new List<Deposit>();
 
+            string watchJson = JsonSerializer.Serialize(DepositList);
+
             var tableColumnsDefinition = new List<ColumnDefinition>
             {
                 new ColumnDefinition { Field = "state", Checkbox = true, Title = null },

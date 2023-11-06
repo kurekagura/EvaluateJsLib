@@ -23,28 +23,6 @@
 
         var jsonObj = @Html.Raw(Json.Serialize(@Model.DepositList));
         var tableColumnsDefinition = @Html.Raw(Json.Serialize(ViewData["TableColumnsDefinition"]));
-        // var tableColumnsDefinition = [{
-        //     field: 'state',
-        //     checkbox: true
-        // }, {
-        //     field: 'RegistrationDate',
-        //     title: '登録日'
-        // }, {
-        //     field: 'UserID',
-        //     title: 'ユーザーID'
-        // }, {
-        //     field: 'Name',
-        //     title: '氏名'
-        // }, {
-        //     field: 'Gender',
-        //     title: '性別'
-        // }, {
-        //     field: 'Age',
-        //     title: '年齢'
-        // }, {
-        //     field: 'Birthday',
-        //     title: '生年月日'
-        // }];
 
         $('#table').bootstrapTable({
             columns: tableColumnsDefinition,

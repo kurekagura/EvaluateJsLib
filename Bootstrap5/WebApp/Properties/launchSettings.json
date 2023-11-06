@@ -3,7 +3,7 @@
     "http": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "Table3",
+      "launchUrl": "Table4",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
