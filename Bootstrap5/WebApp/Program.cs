@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using WebApp.Data;
 
 namespace WebApp
@@ -9,6 +11,7 @@ namespace WebApp
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -33,6 +36,13 @@ namespace WebApp
             builder.Services.AddRazorPages();
 
             var app = builder.Build();
+            var supportedCultures = new List<CultureInfo> { new CultureInfo("ja-JP") };
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                //DefaultRequestCulture = new RequestCulture("ja-JP"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            });
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

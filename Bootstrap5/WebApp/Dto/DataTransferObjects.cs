@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Humanizer.Localisation;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -15,7 +16,8 @@ public class DtoDeposit
 {
     //[JsonPropertyName("RegistrationDate")]
     [BindProperty]
-    [Display(Name = "登録日")]
+    //[Display(Name = "登録日")]
+    [Display(Name = "RegistrationDate", ResourceType = typeof(Resources.Dto))]
     public DateTime RegistrationDate { get; set; }
 
     //[JsonPropertyName("UserID")]
