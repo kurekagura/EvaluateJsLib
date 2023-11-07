@@ -1,0 +1,76 @@
+﻿@page
+@model WebApp.Pages.Sidebar1.IndexModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WebApp</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-table/dist/bootstrap-table.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            @* <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark"> *@
+            <div class="col-auto bg-dark">
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                        <li class="nav-item">
+                            <a class="nav-link align-middle px-0" href="">
+                                <i class="fs-4 bi-table"></i>
+                                @* <span class="ms-1 d-none d-sm-inline">文字文字文字文字文字</span> *@
+                                <span>文字文字文字文字文字</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link align-middle px-0" href="">
+                                <i class="fs-4 bi-table"></i>
+                                <span>文字</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col py-3">
+                <div class="container">
+                    <main role="main" class="pb-3">
+                        <!-- toggler -->
+                        <button class="btn btn-primary float-end"
+                                onclick="((e) => {
+                                console.log('ボタンがクリックされました');
+                                var spanElements = document.querySelectorAll('ul.nav li.nav-item a.nav-link span');
+                                spanElements.forEach(function(spanElement) {
+                                    var hasDNoneClass=spanElement.classList.contains('d-none');
+                                    if (hasDNoneClass) {
+                                        spanElement.classList.remove('d-none');
+                                    } else {
+                                        spanElement.classList.add('d-none');
+                                    }
+                                });
+                            })(event)">
+                            <i class="bi bi-list-task"></i>
+                        </button>
+                        <div>コンテンツ</div>
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap-table/dist/bootstrap-table.min.js"></script>
+    <script src="~/lib/bootstrap-table/dist/locale/bootstrap-table-ja-JP.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+</body>
+</html>
