@@ -6,10 +6,12 @@ namespace Sidebar.Pages
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
+        private readonly IHttpContextAccessor _htAcs;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        public IndexModel(IHttpContextAccessor httpContextAccessor, ILogger<IndexModel> logger)
         {
             _logger = logger;
+            _htAcs = httpContextAccessor;
         }
 
         public void OnGet()

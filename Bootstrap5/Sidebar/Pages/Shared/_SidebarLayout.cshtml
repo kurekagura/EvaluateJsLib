@@ -1,4 +1,17 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor htAcs
+@{
+    string arrows_angle_x;
+    string dnone = htAcs.HttpContext!.Request.Cookies["sidebar_dnone"] ?? string.Empty;
+    if (dnone == string.Empty)
+        arrows_angle_x = "bi-arrows-angle-contract";
+    else
+    {
+        //Cookieに何か設定されていたら設定されていたら強制で"d-none"を再設定
+        dnone = "d-none";
+        arrows_angle_x = "bi-arrows-angle-expand";
+    }
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -31,16 +44,17 @@
                                     }
                                 });
                                 var iElem = aElem.querySelector('i');
-
                                 if (iElem.classList.contains('bi-arrows-angle-contract')) {
-                                    iElem.classList.remove('bi-arrows-angle-contract');
-                                    iElem.classList.add('bi-arrows-angle-expand');
+                                    iElem.classList.replace('bi-arrows-angle-contract', 'bi-arrows-angle-expand');
+                                    document.cookie = 'sidebar_dnone=d-none;path=/;';
+                                    console.log('set dnone=t');
                                 } else if (iElem.classList.contains('bi-arrows-angle-expand')) {
-                                    iElem.classList.remove('bi-arrows-angle-expand');
-                                    iElem.classList.add('bi-arrows-angle-contract');
+                                    iElem.classList.replace('bi-arrows-angle-expand','bi-arrows-angle-contract');
+                                    document.cookie = 'sidebar_dnone=;path=/;';
+                                    console.log('set dnone=f');
                                 }
                             })(this)">
-                            <i class="fs-4 bi bi-arrows-angle-contract"></i>
+                            <i class="fs-4 bi @arrows_angle_x"></i>
                         </a>
                     </div>
                 </div>
@@ -49,19 +63,19 @@
                         <li class="nav-item">
                             <a class="nav-link align-left px-0" asp-area="" asp-page="/Index">
                                 <i class="fs-4 bi-list-task"></i>
-                                <span style="white-space: nowrap;">Top</span>
+                                <span class="@dnone" style="white-space: nowrap;">Top</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link align-left px-0" asp-area="" asp-page="/Home/Index">
                                 <i class="fs-4 bi-house"></i>
-                                <span style="white-space: nowrap;">Home</span>
+                                <span class="@dnone" style="white-space: nowrap;">Home</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link align-left px-0" asp-area="" asp-page="/Privacy/Privacy">
                                 <i class="fs-4 bi-table"></i>
-                                <span style="white-space: nowrap;">プライバシー</span>
+                                <span class="@dnone" style="white-space: nowrap;">プライバシー</span>
                             </a>
                         </li>
                     </ul>

@@ -5,7 +5,7 @@ namespace Sidebar
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            builder.Services.AddHttpContextAccessor();
             // Add services to the container.
             builder.Services.AddRazorPages();
 
