@@ -1,0 +1,139 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor htAcs
+@{
+    string arrows_angle_x;
+    string dnone = htAcs.HttpContext!.Request.Cookies["sidebar_dnone"] ?? string.Empty;
+    if (dnone == string.Empty)
+        arrows_angle_x = "bi-arrows-angle-contract";
+    else
+    {
+        //Cookieに何か設定されていたら設定されていたら強制で"d-none"を再設定
+        dnone = "d-none";
+        arrows_angle_x = "bi-arrows-angle-expand";
+    }
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Sidebar</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-table/dist/bootstrap-table.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Sidebar.styles.css" asp-append-version="true" />
+</head>
+<body>
+
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+
+            <div class="col-auto bg-light">
+                <div class="row">
+                    <!--クリック領域の右寄せにこれ重要-->
+                    <div style="text-align: right;">
+                        <!-- toggler -->
+                        <a onclick="((aElem, menuElem, avatarElem) => {
+                                var spanElems = menuElem.querySelectorAll('li.nav-item a.nav-link span');
+
+                                spanElems.forEach(function(spanElem) {
+                                    var hasDNoneClass=spanElem.classList.contains('d-none');
+                                    if (hasDNoneClass) {
+                                        spanElem.classList.remove('d-none');
+                                    } else {
+                                        spanElem.classList.add('d-none');
+                                    }
+                                });
+                                var spanAvaElem = avatarElem.querySelector('span');
+                                if (spanAvaElem.classList.contains('d-none')) {
+                                    spanAvaElem.classList.remove('d-none');
+                                } else {
+                                    spanAvaElem.classList.add('d-none');
+                                }
+
+                                var iElem = aElem.querySelector('i');
+                                if (iElem.classList.contains('bi-arrows-angle-contract')) {
+                                    iElem.classList.replace('bi-arrows-angle-contract', 'bi-arrows-angle-expand');
+                                    document.cookie = 'sidebar_dnone=d-none;path=/;';
+                                    console.log('set d-none');
+                                } else if (iElem.classList.contains('bi-arrows-angle-expand')) {
+                                    iElem.classList.replace('bi-arrows-angle-expand','bi-arrows-angle-contract');
+                                    document.cookie = 'sidebar_dnone=;path=/;';
+                                    console.log('clear d-none');
+                                }
+                            })(this,document.getElementById('_idmenu'),document.getElementById('_idavatar'))">
+                            <i class="fs-4 bi @arrows_angle_x"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="d-flex flex-column align-items-sm-start px-3 pt-2 text-white min-vh-100" style="padding-bottom: 1rem;padding-right:0!important">
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-sm-start" id="_idmenu">
+                        <li class="nav-item">
+                            <a class="nav-link align-left px-0" asp-area="" asp-page="/Home/Index">
+                                <i class="fs-4 bi-house"></i>
+                                <span class="@dnone mx-1" style="white-space: nowrap;">Home</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link align-left px-0" asp-area="" asp-page="/Index">
+                                <i class="fs-4 bi-list-task"></i>
+                                <span class="@dnone mx-1" style="white-space: nowrap;">Check</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link align-left px-0" asp-area="" asp-page="/Privacy/Privacy">
+                                <i class="fs-4 bi-table"></i>
+                                <span class="@dnone mx-1" style="white-space: nowrap;">プライバシー</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <hr>
+
+                    <div class="dropdown pb-4">
+                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="_idavatar" data-bs-toggle="dropdown" aria-expanded="false">
+                            @* <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle"> *@
+                            <i class="fs-4 bi-person-circle"></i>
+                            @* <span class="@dnone d-sm-inline mx-1">username</span> *@
+                            <span class="@dnone mx-1">username</span>
+                        </a>
+                        <ul class="dropdown-menu text-small shadow" aria-labelledby="_idavatar">
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Sign out</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col py-3">
+                <div class="container">
+                    <main role="main" class="pb-3">
+                        @RenderBody()
+                    </main>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - Sidebar - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap-table/dist/bootstrap-table.min.js"></script>
+    <script src="~/lib/bootstrap-table/dist/locale/bootstrap-table-ja-JP.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
