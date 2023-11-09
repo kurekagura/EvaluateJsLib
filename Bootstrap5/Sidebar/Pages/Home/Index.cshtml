@@ -1,5 +1,7 @@
 ﻿@page
+@using MyResourceNamespace
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor htAcs
+
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
@@ -19,3 +21,7 @@
         <span>@cookie.Value</span>
     }
 }
+
+<div class="container">
+    <h1 class="jumbotron-heading">@All.MENU_PRIVACY</h1>
+</div>
