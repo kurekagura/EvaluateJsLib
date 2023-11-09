@@ -33,40 +33,12 @@
                     <!--クリック領域の右寄せにこれ重要-->
                     <div style="text-align: right;">
                         <!-- toggler -->
-                        <a onclick="((aElem, menuElem, avatarElem) => {
-                                var spanElems = menuElem.querySelectorAll('li.nav-item a.nav-link span');
-
-                                spanElems.forEach(function(spanElem) {
-                                    var hasDNoneClass=spanElem.classList.contains('d-none');
-                                    if (hasDNoneClass) {
-                                        spanElem.classList.remove('d-none');
-                                    } else {
-                                        spanElem.classList.add('d-none');
-                                    }
-                                });
-                                var spanAvaElem = avatarElem.querySelector('span');
-                                if (spanAvaElem.classList.contains('d-none')) {
-                                    spanAvaElem.classList.remove('d-none');
-                                } else {
-                                    spanAvaElem.classList.add('d-none');
-                                }
-
-                                var iElem = aElem.querySelector('i');
-                                if (iElem.classList.contains('bi-arrows-angle-contract')) {
-                                    iElem.classList.replace('bi-arrows-angle-contract', 'bi-arrows-angle-expand');
-                                    document.cookie = 'sidebar_dnone=d-none;path=/;';
-                                    console.log('set d-none');
-                                } else if (iElem.classList.contains('bi-arrows-angle-expand')) {
-                                    iElem.classList.replace('bi-arrows-angle-expand','bi-arrows-angle-contract');
-                                    document.cookie = 'sidebar_dnone=;path=/;';
-                                    console.log('clear d-none');
-                                }
-                            })(this,document.getElementById('_idmenu'),document.getElementById('_idavatar'))">
+                        <a id="_idtoggle" onclick="toggleSidebar('_idtoggle','_idmenu','_idavatar')">
                             <i class="fs-4 bi @arrows_angle_x"></i>
                         </a>
                     </div>
                 </div>
-                <div class="d-flex flex-column align-items-sm-start px-3 pt-2 text-white min-vh-100" style="padding-bottom: 1rem;padding-right:0!important">
+                <div class="d-flex flex-column align-items-sm-start px-3 text-white min-vh-100" style="padding-bottom: 2rem;padding-right:0!important">
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-sm-start" id="_idmenu">
                         <li class="nav-item">
                             <a class="nav-link align-left px-0" asp-area="" asp-page="/Home/Index">
