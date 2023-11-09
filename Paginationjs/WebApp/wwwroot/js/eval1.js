@@ -18,7 +18,7 @@ $(function () {
             }
             createDummyDataFunc(result);
         },
-        pageSize: 5,
+        pageSize: 2,
         pageRange: 3, //選択ページボタンの両側に表示する個数
         prevText: '&lt;',
         nextText: '&gt;',
