@@ -3,12 +3,16 @@
     string arrows_angle_x;
     string dnone = htAcs.HttpContext!.Request.Cookies["sidebar_dnone"] ?? string.Empty;
     if (dnone == string.Empty)
+    {
         arrows_angle_x = "bi-arrows-angle-contract";
+        // arrows_angle_x = "bi-list";
+    }
     else
     {
         //Cookieに何か設定されていたら設定されていたら強制で"d-none"を再設定
         dnone = "d-none";
         arrows_angle_x = "bi-arrows-angle-expand";
+        // arrows_angle_x = "bi-list";
     }
 }
 <!DOCTYPE html>
@@ -34,7 +38,8 @@
                     <div style="text-align: right;">
                         <!-- toggler -->
                         <a id="_idtoggle" onclick="toggleSidebar('_idtoggle','_idmenu','_idavatar')">
-                            <i class="fs-4 bi @arrows_angle_x"></i>
+                            <i class="fs-4 bi @arrows_angle_x" style="display: inline-block;"></i>
+                            @* <div class="pull-right fs-4 @arrows_angle_x"></div> *@
                         </a>
                     </div>
                 </div>
