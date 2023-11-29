@@ -1,0 +1,113 @@
+﻿@page
+@model IndexModel
+@{
+}
+
+@section Heads{
+    <style>
+        .customClass > div.row > div > ol {
+            display: flex;
+            flex-wrap: wrap;
+            list-style: none;
+            /* margin: 0; */
+            padding: 0;
+        }
+
+            .customClass > div.row > div > ol > li {
+                /* width: auto; */
+                margin: 1%;
+                padding: 1%;
+                background: #c3c3c3;
+            }
+
+        .customClass > div.row > div:nth-child(1) {
+            height: 160px;
+            overflow: auto;
+            background-color: #f0f0f0;
+        }
+
+        .customClass > div.row > div:nth-child(2) {
+            /* ブレーク時この高さになる */
+            min-height: 80px;
+            background-color: red;
+        }
+    </style>
+}
+
+<div class="container customClass">
+    <div class="row">
+        <div class="col-lg-6">
+            <ol>
+                <li><span class="text-nowrap">d - 1</span></li>
+                <li><span class="text-nowrap">item - 1</span></li>
+                <li><span class="text-nowrap">aaaaaaaaaaaaaaaaaaaaaaaaaaaa - 1</span></li>
+                <li><span class="text-nowrap">item - 1</span></li>
+                <li><span class="text-nowrap">idddtem - 1</span></li>
+                <li><span class="text-nowrap">item - 1</span></li>
+                <li><span class="text-nowrap">ivdvdtem - 1</span></li>
+                <li><span class="text-nowrap">ivvtem - 1</span></li>
+                <li><span class="text-nowrap">item - 1</span></li>
+                <li><span class="text-nowrap">idddtem - 1</span></li>
+                <li><span class="text-nowrap">ddddddddddddd - 1</span></li>
+                <li><span class="text-nowrap">idvdvdtem - 1</span></li>
+                <li><span class="text-nowrap">item - 1</span></li>
+                <li><span class="text-nowrap">dddddddd - 1</span></li>
+                <li><span class="text-nowrap">item - 1</span></li>
+                <li><span class="text-nowrap">item - 1</span></li>
+                <li><span class="text-nowrap">idddtem - 1</span></li>
+                <li><span class="text-nowrap">ddddddddddddd - 1</span></li>
+                <li><span class="text-nowrap">idvdvdtem - 1</span></li>
+                <li><span class="text-nowrap">item - 1</span></li>
+                <li><span class="text-nowrap">dddddddd - 1</span></li>
+                <li><span class="text-nowrap">item - 1</span></li>
+            </ol>
+
+        </div>
+        <div class="col-lg-6" id="divright">
+            Right Column
+        </div>
+    </div>
+</div>
+
+<br />
+
+<div class="container customClass">
+    <div class="row">
+        <div class="col-lg-6">
+            <ol>
+                <li><span class="text-nowrap">d - 1</span></li>
+                <li><span class="text-nowrap">item - 1</span></li>
+                <li><span class="text-nowrap">aaaaaaaaaaaaaaaaaaaaaaaaaaaa - 1</span></li>
+                <li><span class="text-nowrap">item - 1</span></li>
+                <li><span class="text-nowrap">idddtem - 1</span></li>
+                <li><span class="text-nowrap">item - 1</span></li>
+                <li><span class="text-nowrap">ivdvdtem - 1</span></li>
+                <li><span class="text-nowrap">ivvtem - 1</span></li>
+                <li><span class="text-nowrap">item - 1</span></li>
+                <li><span class="text-nowrap">idddtem - 1</span></li>
+            </ol>
+
+        </div>
+        <div class="col-lg-6" id="divright">
+            Right Column
+        </div>
+    </div>
+</div>
+
+<br />
+
+<div class="container customClass">
+    <div class="row">
+        <div class="col-lg-6">
+            <ol>
+                @for (int i = 0; i < 100; i++)
+                {
+                    <li><span class="text-nowrap">item - @i</span></li>
+                }
+            </ol>
+        </div>
+        <div class="col-lg-6" id="divright">
+            Right Column
+        </div>
+    </div>
+</div>
