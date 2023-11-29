@@ -29,8 +29,34 @@
         .customClass > div.row > div:nth-child(2) {
             /* ブレーク時この高さになる */
             min-height: 80px;
-            background-color: red;
+            /* background-color: red; */
+            background-color: #ecedee;
+            border-radius: 2px;
+            border: 1px solid black;
+            padding: 0;
+            /* margin: 0; */
+            /* display: flex; */
+/*             flex-direction: column;
+            align-items: center;
+            justify-content: center; */
         }
+
+            .customClass > div.row > div:nth-child(2):hover {
+                background-color: #86b7fe;
+            }
+
+            /* 要改善 */
+            .customClass > div.row > div:nth-child(2) > input {
+/*                 position: relative; */
+                opacity: 0;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 1;
+                padding: 0;
+                margin: 0;
+            }
     </style>
 }
 
@@ -63,8 +89,9 @@
             </ol>
 
         </div>
-        <div class="col-lg-6" id="divright">
-            Right Column
+        <div class="col-lg-6">
+        @*     <label>文言</label> *@
+            <input type="file" />
         </div>
     </div>
 </div>
@@ -88,8 +115,9 @@
             </ol>
 
         </div>
-        <div class="col-lg-6" id="divright">
-            Right Column
+        <div class="col-lg-6">
+            <label>文言</label>
+            <input type="file" />
         </div>
     </div>
 </div>
@@ -106,8 +134,9 @@
                 }
             </ol>
         </div>
-        <div class="col-lg-6" id="divright">
-            Right Column
+        <div class="col-lg-6">
+            <label>文言</label>
+            <input type="file" />
         </div>
     </div>
 </div>
