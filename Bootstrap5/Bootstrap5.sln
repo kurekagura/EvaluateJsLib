@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "WebApp\WebApp.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sidebar", "Sidebar\Sidebar.csproj", "{1E557BF2-D2A7-42DA-87C7-4DFFC2C3F53C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bootstrap", "Bootstrap\Bootstrap.csproj", "{E01F00F4-E722-42D4-A164-9E67B23C118A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bootstrap", "Bootstrap\Bootstrap.csproj", "{E01F00F4-E722-42D4-A164-9E67B23C118A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

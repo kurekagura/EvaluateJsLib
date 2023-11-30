@@ -1,0 +1,65 @@
+﻿@page
+@model Spinner1Model
+@{
+}
+
+<div class="card card-body text-primary" id="IdSpinnerDI" style="display:none;">
+    <div class="d-flex justify-content-center">
+        <div class="spinner-grow" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</div>
+
+<button id="IdCloneBT">clone</button>
+
+<section id="IdImagesSE"></section>
+
+@section Scripts{
+    <script>
+        const spinner_classes = ['text-primary', 'text-secondary', 'text-success', 'text-danger',
+            'text-warning', 'text-info', 'text-light', 'text-dark'];
+
+        function generateSequentialNumbersAsStrings(max) {
+            const result = [];
+
+            for (let i = 1; i <= max; i++) {
+                result.push(i.toString());
+            }
+
+            return result;
+        }
+
+        function generateRandomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        $(() => {
+            $('#IdCloneBT').on('click', function () {
+                $('#IdImagesSE').empty();
+
+                const max = generateRandomNumber(1, 20);
+                const generatedArray = generateSequentialNumbersAsStrings(max);
+                console.log(generatedArray);
+
+                const convertedArray = generatedArray.map((label, index) => {
+                    const length = spinner_classes.length;
+                    const selectedClass = spinner_classes[index % length];
+                    console.log(index, selectedClass);
+
+                    // IdSpinnerDIをクローン
+                    const cloneSpinner = $('#IdSpinnerDI').clone();
+                    cloneSpinner.addClass(selectedClass);
+                    cloneSpinner.css('display', '');
+
+                    // IdImagesSEに追加
+                    $('#IdImagesSE').append(cloneSpinner);
+
+                    return parseInt(label, 10);
+                });
+                console.log(convertedArray);
+            });
+        });
+
+    </script>
+}
