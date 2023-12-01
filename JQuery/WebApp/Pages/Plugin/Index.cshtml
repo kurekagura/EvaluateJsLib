@@ -1,0 +1,29 @@
+﻿@page
+@model WebApp.Pages.Plugin.IndexModel
+@{
+    var dic = new Dictionary<string, string>()
+    {{ "IdPluginA","ぷらぐいんA" },{"IdPluginB", "ぷらぐいんB" }};
+}
+
+<partial name="_PluginAPartial" model=@("IdPluginA") />
+<partial name="_PluginBPartial" model=@("IdPluginB") />
+
+<h1>Plugin Test</h1>
+
+<partial name="_PluginMenuPartial" model="@(id:"IdMenu", items:dic)" />
+
+<section id="IdSEC"></section>
+
+@section Scripts{
+
+    <script>
+        $(() => {
+            $('#IdMenu').myMenu().on('selected.mymenu', (event, selVal) => {
+                const cloned = $(`#${selVal}`).clone();
+                cloned.css('display', '');
+                $('#IdSEC').append(cloned);
+            });
+
+        });
+    </script>
+}
