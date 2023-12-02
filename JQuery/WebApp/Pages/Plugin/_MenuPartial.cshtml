@@ -4,7 +4,7 @@
     <ul class="dropdown-menu">
         @foreach (var kv in Model.items)
         {
-            <li><button class="dropdown-item" type="button" data-value="@kv.Key">@kv.Value</button></li>
+            <li><button class="dropdown-item" type="button" data-value="@kv.Key" data-text="@kv.Value">@kv.Value</button></li>
         }
     </ul>
 </div>

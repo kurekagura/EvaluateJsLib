@@ -2,28 +2,66 @@
 @model WebApp.Pages.Plugin.IndexModel
 @{
     var dic = new Dictionary<string, string>()
-    {{ "IdPluginA","ぷらぐいんA" },{"IdPluginB", "ぷらぐいんB" }};
+    {{ "aplugin","ぷらぐいんA" },{"bplugin", "ぷらぐいんB" }};
 }
 
-<partial name="_PluginAPartial" model=@("IdPluginA") />
-<partial name="_PluginBPartial" model=@("IdPluginB") />
+@* 隠しビュー(cloneして表示) *@
+@* idをId_<data-my-plugin属性値> *@
+<partial name="_PluginAPartial" model=@("Id_aplugin") />
+<partial name="_PluginBPartial" model=@("Id_bplugin") />
 
 <h1>Plugin Test</h1>
 
-<partial name="_PluginMenuPartial" model="@(id:"IdMenu", items:dic)" />
+<button type="button" class="btn btn-outline-danger" id="IdTorokuBT">登録</button>
 
-<section id="IdSEC"></section>
+<partial name="_SequencePartial" model="@("IdSequences")" />
+
+<partial name="_MenuPartial" model="@(id:"IdMenu", items:dic)" />
+
+<section id="IdPluginsSEC"></section>
 
 @section Scripts{
 
     <script>
         $(() => {
-            $('#IdMenu').myMenu().on('selected.mymenu', (event, selVal) => {
-                const cloned = $(`#${selVal}`).clone();
-                cloned.css('display', '');
-                $('#IdSEC').append(cloned);
+            $('#IdMenu').myMenu().on('selected.mymenu', (event, selVal, selText) => {
+                var count = $('#IdPluginsSEC').children(`[data-my-plugin="${selVal}"]`).length;
+                console.log(`${selVal}の現在数:`, count);
+                const clone = $(`#Id_${selVal}`).clone();
+                $('#IdPluginsSEC').append(clone);
+
+                if (selVal === 'aplugin') {
+                    console.log('PluginAを付ける');
+                    clone.myPluginA({ apiUrl: 'hoge' });
+                    //const blobUrl = URL.createObjectURL([]);
+                    //関数
+                    clone.myPluginA('setImage', 'blobUrl');
+                    clone.myPluginA('getFormData', (fd) => {
+                        //formData取得
+                        console.log('Callback from getFormData');
+                    });
+                } else if (selVal === 'bplugin') {
+                    console.log('PluginBを付ける');
+                }
+                clone.css('display', '');
+
+                //シーケンスの追加関数を呼び出して追加
+                $('#IdSequences').mySequences('appendSequence', selText, function (newIndex) {
+                    console.log('[caller]追加Index->activate(fire click?)', newIndex, this);
+                    this.mySequences('selectIndex', newIndex);
+                });
             });
 
+            $('#IdSequences').mySequences({}).on('selectionChanged.mysequences', (event, index) => {
+                console.log('[receiver]selectionChanged.mysequences', index);
+            }).on('sequenceChanged.mysequences', (event, before, after) => {
+                console.log('[receiver]sequenceChanged.mysequences', before, after);
+            });
+
+            $('#IdTorokuBT').on('click', (e) => {
+                console.log('登録ボタン押下。プラグインからfd収集。');
+
+            });
         });
     </script>
 }

@@ -18,11 +18,16 @@ $(function () {
             }
             createDummyDataFunc(result);
         },
+        showPageNumbers: false,
+        showNavigator: true,
+        showGoInput: true,
+        showGoButton: true,
         pageSize: 2,
-        pageRange: 3, //選択ページボタンの両側に表示する個数
+        //pageRange: 3, //選択ページボタンの両側に表示する個数
         prevText: '&lt;',
         nextText: '&gt;',
         callback: function (data, pagination) {
+            console.log('Changing page');
             // ページめくりで呼ばれる。dataをHTML要素に変換。
             $('#idcontents').html(createElement(data));
         }

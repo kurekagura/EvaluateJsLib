@@ -1,7 +1,16 @@
-﻿<div id="@Model" style="display:none;border:solid 1px; border-color:red;">
-    <h4>プラグインA</h4>
+﻿@{
+    Layout = "_PluginLayout";
+    ViewData["Id"] = @Model;
+    ViewData["Title"] = "プラグインAのタイトル";
+    ViewData["DataMyPlugin"] = "aplugin";
+}
+
+<div style="border:dotted 2px; border-color:red;">
     <form>
-        <input type="datetime" />
-        <button type="submit">Save</button>
+        <div>画像</div>
+        <img src="" />
+        <input type="number" min="1" max="10" step="1" name="name1" value="2">
+        <br />
+        <button type="submit">保存</button>
     </form>
 </div>

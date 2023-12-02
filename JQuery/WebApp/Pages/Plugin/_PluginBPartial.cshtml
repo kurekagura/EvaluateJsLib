@@ -1,8 +1,18 @@
-﻿<div id="@Model" style="display:none;border:solid 1px; border-color:blue;">
-    <h4>プラグインB</h4>
+﻿@{
+    Layout = "_PluginLayout";
+    ViewData["Id"] = @Model;
+    ViewData["Title"] = "プラグインBのタイトル";
+    ViewData["DataMyPlugin"] = "bplugin";
+}
+
+<div style="border:dotted 2px; border-color:blue;">
     <form>
-        <input type="datetime" />
+        <input type="time" />
         <input type="text" />
-        <button type="submit">Save</button>
+        <p>
+            <input type="radio" name="myradio" value="はい"> はい
+            <input type="radio" name="myradio" value="いいえ" checked> いいえ
+        </p>
+        <button type="submit">保存</button>
     </form>
 </div>
