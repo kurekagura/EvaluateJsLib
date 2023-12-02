@@ -1,5 +1,8 @@
-﻿<div id="@ViewData["Id"]" style="display:none;border:solid 2px; border-color:black;padding:1px;" data-my-plugin="@ViewData["DataMyPlugin"]">
-    <h4>@ViewData["Title"]</h4>
+﻿@* data-my-plugin="クラス識別子" 必須 *@
+@* 注意：idはテンプレートのID。クローン後に置き換える *@
+<div id="@ViewData["Id"]" style="display:none;border:solid 2px; border-color:black;padding:1px;" data-my-plugin="@ViewData["DataMyPlugin"]">
+    @* class="myPluginDelete" 必須 *@
+    <h4>@ViewData["Title"]</h4><button type="button" class="myPluginDelete">削除(on Layout)</button>
     @RenderBody()
     <div>これプラグインレイアウト</div>
 </div>

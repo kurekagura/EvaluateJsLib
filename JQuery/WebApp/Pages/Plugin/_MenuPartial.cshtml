@@ -1,6 +1,18 @@
 ﻿@model (string id, Dictionary<string,string> items)
-<div class="dropdown" id="@Model.id">
-    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">作成</button>
+
+@* <div class="dropdown" id="@Model.id">
+    <button class="w-100 btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">作成</button>
+    <ul class="dropdown-menu">
+        @foreach (var kv in Model.items)
+        {
+            <li><button class="dropdown-item" type="button" data-value="@kv.Key" data-text="@kv.Value">@kv.Value</button></li>
+        }
+    </ul>
+</div>
+ *@
+
+<div class="w-100 btn-group dropend" id="@Model.id">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">作成</button>
     <ul class="dropdown-menu">
         @foreach (var kv in Model.items)
         {

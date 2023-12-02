@@ -1,4 +1,22 @@
-﻿(function ($) {
+﻿function swapElement(parentSelector, beforeIndex, afterIndex) {
+    var gIndex, sIndex;
+
+    if (beforeIndex > afterIndex) {
+        gIndex = beforeIndex;
+        sIndex = afterIndex;
+    } else {
+        gIndex = afterIndex;
+        sIndex = beforeIndex;
+    }
+
+    const $parent = $(parentSelector);
+    const $children = $parent.children();
+
+    $children.eq(sIndex).insertAfter($children.eq(gIndex));
+    $children.eq(gIndex).insertBefore($children.eq(sIndex));
+}
+
+(function ($) {
     $.fn.myMenu = function () {
         const self = this;
 
@@ -52,7 +70,7 @@
         // メソッドの呼び出し
         if (typeof options === 'string') {
             var args = Array.prototype.slice.call(arguments, 1);
-
+            const $parent = self.find('.list-group');
             switch (options) {
                 case 'appendSequence':
                     const dispText = args[0];
@@ -61,10 +79,15 @@
                     console.log('[callee]追加index', newIndex);
                     callback.call(self, newIndex);　//呼び出し元をjQueryPluginにする
                     return this;
+                case 'removeSequence':
+                    const removingIdx = args[0];
+                    const $child = $parent.children().eq(removingIdx);
+                    $child.off('click'); //appendSequenceでonしている。
+                    $child.remove();
+                    return this;
                 case 'selectIndex':
                     console.log('[callee]selectIndex');
                     const index = args[0];
-                    const $parent = self.find('.list-group');
                     // index番目の子要素に対してclickイベントを発生させる
                     $parent.children().eq(index).trigger('click');
                     return this;
