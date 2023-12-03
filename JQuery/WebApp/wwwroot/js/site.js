@@ -1,4 +1,111 @@
-﻿function swapElement(parentSelector, beforeIndex, afterIndex) {
+﻿(function ($) {
+    $.fn.mySequenceTable = function (options) {
+        const self = this; //JqObj
+
+        // 初期化
+        if (typeof options === 'object') {
+            self.find('[data-my-up]').on('click', (e) => {
+                console.log('up clicked');
+                const $table = self.find('table');
+                const selRows = $table.bootstrapTable('getSelections');
+                if (selRows.length < 1)
+                    return;
+
+                const data = $table.bootstrapTable('getData');
+                let beforeIndex = 0; //現在0もNGの為
+                $.each(data, function (i, item) {
+                    if (item.id === selRows[0].id) {
+                        beforeIndex = i;
+                        return false;  // eachループを終了
+                    }
+                });
+                if (beforeIndex === 0)
+                    return;
+
+                const afterIndex = beforeIndex - 1;
+                const swapData = swapRows(data, beforeIndex, afterIndex);
+                $table.bootstrapTable('load', swapData);
+                self.trigger('sequenceChanged.mysequences', [beforeIndex, afterIndex]);
+            });
+            self.find('[data-my-down]').on('click', (e) => {
+                console.log('down clicked');
+                const $table = self.find('table');
+                const selRows = $table.bootstrapTable('getSelections');
+                if (selRows.length < 1)
+                    return;
+
+                const data = $table.bootstrapTable('getData');
+                const lastIndex = data.length - 1;
+                let beforeIndex = lastIndex; //lastIndexもNGの為
+                $.each(data, function (i, item) {
+                    if (item.id === selRows[0].id) {
+                        beforeIndex = i;
+                        return false;  // eachループを終了
+                    }
+                });
+                if (beforeIndex === lastIndex)
+                    return;
+
+                const afterIndex = beforeIndex + 1;
+                const swapData = swapRows(data, beforeIndex, afterIndex);
+                $table.bootstrapTable('load', swapData);
+                self.trigger('sequenceChanged.mysequences', [beforeIndex, afterIndex]);
+            });
+        }
+
+        // メソッドの呼び出し
+        if (typeof options === 'string') {
+            var args = Array.prototype.slice.call(arguments, 1);
+            const $table = self.find('table');
+            switch (options) {
+                case 'appendSequence':
+                    const dispText = args[0];
+                    /*const callback = args[1];*/
+                    const newIndex = appendSequenceInternal($table, dispText);
+                    //console.log('[callee]追加index', newIndex);
+                    //callback.call(self, newIndex);　//呼び出し元をjQueryPluginにする
+                    return this;
+                case 'removeSequence':
+                    const removingIndex = args[0];
+                    $table.bootstrapTable('remove', { field: '$index', values: [removingIndex] });
+                    //idを詰める
+                    const data = $table.bootstrapTable('getData');
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        if (i < removingIndex) {
+                            break;
+                        }
+                        data[i].id = data[i].id - 1;
+                    }
+                    $table.bootstrapTable('load', data);
+                    return this;
+            }
+        }
+
+        function appendSequenceInternal($table, dispText) {
+            const data = $table.bootstrapTable('getData');
+            const newIndex = data.length;
+            $table.bootstrapTable('append', [{ id: newIndex, radio: false, name: dispText }]);
+            return newIndex;
+
+        };
+
+        function swapRows(jsonData, before, after) {
+            // 行のスワップ
+            const tmp = jsonData[before];
+            jsonData[before] = jsonData[after];
+            jsonData[after] = tmp;
+
+            const tmpid = jsonData[before].id;
+            jsonData[before].id = jsonData[after].id;
+            jsonData[after].id = tmpid;
+            return jsonData;
+        }
+
+        return this;
+    };
+})(jQuery);
+
+function swapElement(parentSelector, beforeIndex, afterIndex) {
     var gIndex, sIndex;
 
     if (beforeIndex > afterIndex) {
