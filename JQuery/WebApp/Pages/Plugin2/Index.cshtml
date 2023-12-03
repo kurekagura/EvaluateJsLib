@@ -1,0 +1,130 @@
+﻿@page
+@model WebApp.Pages.Plugin2.IndexModel
+@{
+    var dic = new Dictionary<string, string>()
+    {{ "aplugin","ぷらぐいんA" },{"bplugin", "ぷらぐいんB" }};
+}
+
+@section Heads{
+    <style>
+        .list-group-item.active,
+        .list-group-item.active:hover,
+        .list-group-item.active:focus {
+            background-color: #28a745; /* .btn-success の背景色 */
+            border-color: #28a745; /* .btn-success の境界色 */
+            color: #fff; /* .btn-success のテキスト色 */
+        }
+    </style>
+}
+
+@* 隠しビュー(cloneして表示) *@
+@* idをId_<data-my-plugin属性値> *@
+<partial name="_PluginAPartial" model=@("Id_aplugin") />
+<partial name="_PluginBPartial" model=@("Id_bplugin") />
+
+<h1>Plugin2</h1>
+<ol>
+    <li>アコーディオン</li>
+    <li>テーブルによるシーケンス</li>
+</ol>
+<div class="container-fluid">
+    <div class="row">
+        <form>
+            <input type="text" />
+            <button type="button" class="btn btn-outline-danger" id="IdTorokuBT">登録</button>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="my-sm-1 my-md-2 my-lg-3 my-xl-4">
+                <partial name="_MenuPartial" model="@(id:"IdMenu", items:dic)" />
+            </div>
+            <partial name="_SequenceTablePartial" model="@("IdSequences")" />
+        </div>
+        <div class="col-md-9">
+            <div class="accordion accordion-flush" id="IdPluginsSEC">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+
+        function deletePlugin() {
+            console.log('[callee]', this);
+            const $plugin = $(this).closest('[data-my-plugin]');
+            const idx = $plugin.index();
+            console.log('removing:', idx);
+            $(this).off('click');
+            // jQueryオブジェクトに束縛されているので戻り値有。
+            const jobj = $plugin.remove();
+            // TODO:jQueryプラグインに'destroy'実装。
+            console.log(jobj);
+            // シーケンスからも削除
+            $('#IdSequences').mySequences('removeSequence', idx);
+        }
+
+        $(() => {
+            $('#IdMenu').myMenu().on('selected.mymenu', (event, selVal, selText) => {
+                const count = $('#IdPluginsSEC').children('[data-my-plugin]').length;
+                const countOfPlugin = $('#IdPluginsSEC').children(`[data-my-plugin="${selVal}"]`).length;
+
+                console.log(`${selVal}の現在数:${countOfPlugin}/${count}`);
+                const $clone = $(`#Id_${selVal}`).clone();
+                const idPlugin = `IdPluginsSEC_${count}`;
+                $clone.attr('id', idPlugin);
+
+                const idPluginCollapse = `${idPlugin}_collapse`;
+                $clone.find('.accordion-collapse').attr('id', idPluginCollapse);
+                var $targetElement = $clone.find('[data-bs-target]');
+                $targetElement.attr('data-bs-target', '#' + idPluginCollapse);
+
+                $('#IdPluginsSEC').append($clone);
+
+                switch (selVal) {
+                    case 'aplugin':
+                        console.log('PluginAを付ける');
+
+                        $clone.myPluginA({ apiUrl: 'hoge' });
+                        // const blobUrl = URL.createObjectURL([]);
+                        // 関数
+                        $clone.myPluginA('setImage', 'blobUrl');
+                        $clone.myPluginA('getFormData', (fd) => {
+                            // formData取得
+                            console.log('Callback from getFormData');
+                        });
+                        break;
+                    case 'bplugin':
+                        console.log('PluginBを付ける');
+                        break;
+                    // 追加のケースがあればここに追加
+                    default:
+                    // デフォルトの処理
+                }
+                $clone.on('click', '.myPluginDelete', deletePlugin);
+                $clone.css('display', '');
+
+                //シーケンスの追加関数を呼び出して追加
+                $('#IdSequences').mySequences('appendSequence', selText, function (newIndex) {
+                    console.log('[caller]追加Index->activate(fire click?)', newIndex, this);
+                    this.mySequences('selectIndex', newIndex);
+                });
+            });
+
+            $('#IdSequences').mySequences({}).on('selectionChanged.mysequences', (event, index) => {
+                console.log('[receiver]selectionChanged.mysequences', index);
+            }).on('sequenceChanged.mysequences', (event, before, after) => {
+                // スワップ
+                console.log('[receiver]sequenceChanged.mysequences', before, after);
+                swapElement($('#IdPluginsSEC'), before, after);
+            });
+
+            $('#IdTorokuBT').on('click', (e) => {
+                console.log('登録ボタン押下。プラグインからfd収集。');
+
+            });
+        });
+    </script>
+}

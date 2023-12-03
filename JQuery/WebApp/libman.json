@@ -15,6 +15,8 @@
         "font/bootstrap-icons.min.css",
         "icons/arrows-angle-contract.svg",
         "icons/arrows-angle-expand.svg",
+        "icons/caret-up-fill.svg",
+        "icons/caret-down-fill.svg",
         "icons/clipboard-check.svg",
         "icons/cloud-upload.svg",
         "icons/cpu.svg",

@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "_PluginLayout";
+    ViewData["Id"] = @Model;
+    ViewData["Title"] = "プラグインBのタイトル";
+    ViewData["DataMyPlugin"] = "bplugin";
+}
+
+<div style="border:dotted 2px; border-color:blue;">
+    <form>
+        <input type="time" />
+        <input type="text" />
+        <p>
+            <input type="radio" name="myradio" value="はい"> はい
+            <input type="radio" name="myradio" value="いいえ" checked> いいえ
+        </p>
+        <button type="submit">保存</button>
+    </form>
+</div>

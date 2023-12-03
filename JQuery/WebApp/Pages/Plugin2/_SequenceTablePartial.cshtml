@@ -1,0 +1,14 @@
+﻿@model string
+<section id="@Model">
+    <div class="w-100 btn-group" role="group" aria-label="Up Down button group">
+        <button type="button" class="btn btn-outline-secondary btn-sm" data-my-up>
+            <i class="bi bi-caret-up-fill"></i>上へ移動
+        </button>
+        <button type="button" class="btn btn-outline-secondary btn-sm" data-my-down>
+            <i class="bi bi-caret-down-fill"></i>下へ移動
+        </button>
+    </div>
+
+    @* list-group必須 *@
+    <div class="list-group" style="border:solid 1px;border-color:blue"></div>
+</section>

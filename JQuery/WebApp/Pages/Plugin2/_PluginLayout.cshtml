@@ -1,0 +1,24 @@
+﻿@* data-my-plugin="クラス識別子" 必須 *@
+@* 注意：idはテンプレートのID。クローン後に置き換える *@
+@* class="myPluginDelete" 必須 *@
+@* id関連3箇所置換 必須 *@
+@* 常時オープンには各.accordion-collapseのdata-bs-parent属性は付けない *@
+
+@{
+    var id = @ViewData["Id"];
+    var id_collapse = id + "_collapse";
+}
+
+<div class="accordion-item" id="@ViewData["Id"]" data-my-plugin="@ViewData["DataMyPlugin"]" style="display:none;">
+    <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#@id_collapse" aria-expanded="false" aria-controls="collapse action">
+            @ViewData["Title"]
+        </button>
+    </h2>
+    <div id="@id_collapse" class="accordion-collapse collapse show">
+        <div class="accordion-body">
+            <button type="button" class="myPluginDelete">削除(on Layout)</button>
+            @RenderBody()
+        </div>
+    </div>
+</div>
