@@ -41,12 +41,12 @@
                     Featured
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">Special title treatment</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <h5 class="card-title">カードのタイトル</h5>
+                    <p class="card-text">カードのボディ</p>
+                    <a href="#" class="btn btn-primary">ボタン</a>
                 </div>
                 <div class="card-footer text-body-secondary">
-                    2 days ago
+                    カードのフッター
                 </div>
             </div>
             <div class="accordion accordion-flush" id="IdPluginsSEC">
@@ -58,6 +58,40 @@
 @section Scripts{
 
     <script>
+        function noFormatter(value, row) {
+            const no = value + 1;
+            return no;
+        }
+
+        function checkboxFormatter(value, row) {
+            console.log('[callee]checkboxFormatter', value, row);
+            let checkStr;
+            if (value === true) {
+                checkStr = '<input type="checkbox" checked';
+            } else {
+                checkStr = '<input type="checkbox"';
+            }
+            checkStr += ' onchange="handleChange(this)">';
+            return checkStr;
+        }
+
+        function handleChange(cbElem) {
+            // jsonを自前で変更
+            let check;
+            if (cbElem.checked) {
+                check = true;
+                console.log('チェックされました');
+            } else {
+                check = false;
+                console.log('チェックが外れました');
+            }
+            const $cb = $(cbElem);
+            const $table = $cb.closest("table");
+            const $tr = $cb.closest("tr");
+            const $index = $tr.index();
+            console.log($index, check);
+            $table.bootstrapTable('updateCell', { index: $index, field: 'check', value: check, reinit: false });
+        }
 
         function deletePlugin() {
             console.log('[callee]', this);
@@ -115,14 +149,14 @@
 
                 $('#IdSequences').mySequenceTable('appendSequence', selText);
             });
-            
+
             //sequenceChanged.mysequences'は不要？
             $('#IdSequences').mySequenceTable({})
-            .on('sequenceChanged.mysequences', (event, before, after) => {
-                // スワップ
-                console.log('[receiver]sequenceChanged.mysequences', before, after);
-                swapElement($('#IdPluginsSEC'), before, after);
-            });
+                .on('sequenceChanged.mysequences', (event, before, after) => {
+                    // スワップ
+                    console.log('[receiver]sequenceChanged.mysequences', before, after);
+                    swapElement($('#IdPluginsSEC'), before, after);
+                });
 
             $('#IdTorokuBT').on('click', (e) => {
                 console.log('登録ボタン押下。プラグインからfd収集。');

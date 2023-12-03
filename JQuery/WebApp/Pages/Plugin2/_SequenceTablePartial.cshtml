@@ -2,7 +2,7 @@
 @* data-unique-id="id" *@
 @* $table.bootstrapTable('getRowByUniqueId', 1). *@
 <section id="@Model">
-    <div class="w-100 btn-group" role="group" aria-label="Up Down button group">
+    <div class="w-80 btn-group" role="group" aria-label="Up Down button group">
         <button type="button" class="btn btn-outline-secondary btn-sm" data-my-up><i class="bi bi-caret-up-fill"></i>上へ移動</button>
         <button type="button" class="btn btn-outline-secondary btn-sm" data-my-down><i class="bi bi-caret-down-fill"></i>下へ移動</button>
     </div>
@@ -12,10 +12,10 @@
         <thead>
             <tr>
                 <th data-field="radio" data-radio="true"></th>
-                <th data-field="id">ID</th>
+                <th data-field="id" data-formatter="noFormatter">No</th>
                 <th data-field="name">Name</th>
                 @* <th data-field="index"></th> *@
-                <th>x</th>
+                <th data-field="check" data-formatter="checkboxFormatter"></th>
                 @* <th></th> *@
             </tr>
         </thead>

@@ -67,6 +67,7 @@
                     return this;
                 case 'removeSequence':
                     const removingIndex = args[0];
+                    //removeはfield: $index（？）が利用できる。
                     $table.bootstrapTable('remove', { field: '$index', values: [removingIndex] });
                     //idを詰める
                     const data = $table.bootstrapTable('getData');
@@ -84,7 +85,9 @@
         function appendSequenceInternal($table, dispText) {
             const data = $table.bootstrapTable('getData');
             const newIndex = data.length;
-            $table.bootstrapTable('append', [{ id: newIndex, radio: false, name: dispText }]);
+            $table.bootstrapTable('append', [{ id: newIndex, radio: false, name: dispText, check: false }]);
+            $table.bootstrapTable('uncheckAll'); //必須
+            $table.bootstrapTable('checkBy', { field: 'id', values: [newIndex] })
             return newIndex;
 
         };
