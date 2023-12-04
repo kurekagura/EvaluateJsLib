@@ -7,6 +7,10 @@
 
 @section Heads{
     <style>
+        .accordion-button:not(collapsed) {
+            background-color: var(--bs-danger);
+        }
+        /* .accordion-button-bg */
     </style>
 }
 
@@ -43,7 +47,7 @@
                 <div class="card-body">
                     <h5 class="card-title">カードのタイトル</h5>
                     <p class="card-text">カードのボディ</p>
-                    <a href="#" class="btn btn-primary">ボタン</a>
+                    <button type="button" class="btn btn-warning" id="IdGetCheckedBT">チェック取得</button>
                 </div>
                 <div class="card-footer text-body-secondary">
                     カードのフッター
@@ -58,40 +62,6 @@
 @section Scripts{
 
     <script>
-        function noFormatter(value, row) {
-            const no = value + 1;
-            return no;
-        }
-
-        function checkboxFormatter(value, row) {
-            console.log('[callee]checkboxFormatter', value, row);
-            let checkStr;
-            if (value === true) {
-                checkStr = '<input type="checkbox" checked';
-            } else {
-                checkStr = '<input type="checkbox"';
-            }
-            checkStr += ' onchange="handleChange(this)">';
-            return checkStr;
-        }
-
-        function handleChange(cbElem) {
-            // jsonを自前で変更
-            let check;
-            if (cbElem.checked) {
-                check = true;
-                console.log('チェックされました');
-            } else {
-                check = false;
-                console.log('チェックが外れました');
-            }
-            const $cb = $(cbElem);
-            const $table = $cb.closest("table");
-            const $tr = $cb.closest("tr");
-            const $index = $tr.index();
-            console.log($index, check);
-            $table.bootstrapTable('updateCell', { index: $index, field: 'check', value: check, reinit: false });
-        }
 
         function deletePlugin() {
             console.log('[callee]', this);
@@ -161,6 +131,12 @@
             $('#IdTorokuBT').on('click', (e) => {
                 console.log('登録ボタン押下。プラグインからfd収集。');
 
+            });
+
+            $('#IdGetCheckedBT').on('click', function () {
+                console.log('チェック抽出');
+                const data = $('#IdSequences').mySequenceTable('getData');
+                console.log(data);
             });
         });
     </script>

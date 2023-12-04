@@ -4,6 +4,37 @@
 
         // 初期化
         if (typeof options === 'object') {
+            //グローバルスコープで宣言
+            window._sequenceTable_noFormatter = function (value, row) {
+                console.log('●[callee]_sequenceTable_noFormatter', value);
+                const no = value + 1;
+                return no;
+            };
+
+            window._sequenceTable_checkboxFormatter = function (value, row) {
+                console.log('◆[callee]_sequenceTable_checkboxFormatter', value);
+                let checkStr;
+                if (value === true) {
+                    checkStr = '<input type="checkbox" checked';
+                } else {
+                    checkStr = '<input type="checkbox"';
+                }
+                checkStr += ' onchange="_sequenceTable_checkboxOnchange(this)">';
+                return checkStr;
+            }
+
+            window._sequenceTable_checkboxOnchange = function(cbElem) {
+                // jsonを自前で変更
+                // cbElem.checkedに必ずtrue/falseが入っている。undefinedはない。
+                const $cb = $(cbElem);
+                const $table = self.find('table');
+                const $tr = $cb.closest("tr");
+                const $index = $tr.index();
+                console.log('■[callee]_sequenceTable_checkboxOnchange', $index, cbElem.checked);
+                //updateCellはindex:指定ができる
+                $table.bootstrapTable('updateCell', { index: $index, field: 'check', value: cbElem.checked, reinit: false });
+            }
+
             self.find('[data-my-up]').on('click', (e) => {
                 console.log('up clicked');
                 const $table = self.find('table');
@@ -25,7 +56,8 @@
                 const afterIndex = beforeIndex - 1;
                 const swapData = swapRows(data, beforeIndex, afterIndex);
                 $table.bootstrapTable('load', swapData);
-                self.trigger('sequenceChanged.mysequences', [beforeIndex, afterIndex]);
+                //self.trigger('sequenceChanged.mysequences', [beforeIndex, afterIndex]);
+
             });
             self.find('[data-my-down]').on('click', (e) => {
                 console.log('down clicked');
@@ -79,6 +111,8 @@
                     }
                     $table.bootstrapTable('load', data);
                     return this;
+                case 'getData':
+                    return $table.bootstrapTable('getData');
             }
         }
 
