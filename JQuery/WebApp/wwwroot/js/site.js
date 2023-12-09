@@ -316,3 +316,43 @@ function swapElement(parentSelector, beforeIndex, afterIndex) {
         return this; // チェーン可能にするために this を返す
     };
 })(jQuery);
+
+
+//function insertPrefixToId($element, prefix) {
+//    $element.find('[id]').each(function () {
+//        var currentId = $(this).attr('id');
+//        var newId = prefix + currentId;
+
+//        // id属性を新しい値に変更
+//        $(this).attr('id', newId);
+
+//        // 対応するlabel要素を取得し、for属性を新しい値に変更
+//        var $associatedLabel = $('label[for="' + currentId + '"]');
+//        $associatedLabel.attr('for', newId);
+//    });
+//}
+
+/**
+* 指定された要素内のすべての子孫要素のid属性にプレフィックスを挿入し、
+* 対応するlabel要素のfor属性も更新します。
+* 
+* @param {HTMLElement} element - プレフィックスを挿入する要素
+* @param {string} prefix - 挿入するプレフィックス
+*/
+function insertPrefixToId(element, prefix) {
+    var elementsWithId = element.querySelectorAll('[id]');
+
+    elementsWithId.forEach(function (elementWithId) {
+        var currentId = elementWithId.id;
+        var newId = prefix + currentId;
+
+        // id属性を新しい値に変更
+        elementWithId.id = newId;
+
+        // 対応するlabel要素を取得し、for属性を新しい値に変更
+        var associatedLabel = document.querySelector('label[for="' + currentId + '"]');
+        if (associatedLabel) {
+            associatedLabel.setAttribute('for', newId);
+        }
+    });
+}

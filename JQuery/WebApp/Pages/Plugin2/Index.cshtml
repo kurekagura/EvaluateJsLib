@@ -86,7 +86,10 @@
                 const $clone = $(`#Id_${selVal}`).clone();
                 const idPlugin = `IdPluginsSEC_${count}`;
                 $clone.attr('id', idPlugin);
+                //TODO:label for="id"ようにidを書き換える(全idにprefixを挿入)
+                //insertPrefixToId
 
+                //BSアコーディオンのためにidとdata-bs-targetを固有のものにする必要がある。
                 const idPluginCollapse = `${idPlugin}_collapse`;
                 $clone.find('.accordion-collapse').attr('id', idPluginCollapse);
                 var $targetElement = $clone.find('[data-bs-target]');
