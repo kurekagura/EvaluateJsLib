@@ -1,0 +1,87 @@
+﻿@page
+@model WebApp.Pages.Table5.IndexModel
+@{
+}
+
+<h1>複数行選択（Checkbox）+Pagenation</h1>
+<p>ページ変更の際、Checkboxは解除されない</p>
+
+<table id="table"
+       data-click-to-select="true"
+       data-pagination="true"
+       data-id-field="UserID"
+@* ページ件数pageSizeとあわせる *@
+       data-page-list="[5]">
+</table>
+
+<button id="idSelectBtn" disabled>選択</button>
+
+@section Scripts {
+
+    <script type="text/javascript" charset="utf-8">
+
+        var jsonObj = @Html.Raw(Json.Serialize(@Model.DepositList));
+
+        $('#table').bootstrapTable({
+            columns: [
+                {
+                    checkbox: true, // チェックボックスを表示する
+                    visible: true // チェックボックスを表示する
+                },
+                {
+                    field: 'RegistrationDate',
+                    title: 'Registration Date',
+                    //sortable: true
+                },
+                {
+                    field: 'UserID',
+                    title: 'User ID',
+                    //sortable: true
+                },
+                {
+                    field: 'Name',
+                    title: 'Name',
+                    //sortable: true
+                },
+                {
+                    field: 'Gender',
+                    title: 'Gender',
+                    //sortable: true
+                },
+                {
+                    field: 'Age',
+                    title: 'Age',
+                    //sortable: true
+                },
+                {
+                    field: 'Total',
+                    title: 'Total',
+                    //sortable: true
+                },
+                {
+                    field: 'Birthday',
+                    title: 'Birthday',
+                    //sortable: true
+                }],
+            pageSize: 5,
+            clickToSelect: true,
+            singleSelect: true,
+            data: jsonObj,
+            uniqueId: 'UserID' // 一意のIDとしてUserIDを使用
+        }).on('check.bs.table', function (e, row) {
+            // 行がチェックされたときの処理
+            console.log('check.bs.table:', row);
+
+        }).on('uncheck.bs.table', function (e, row) {
+            // 行のチェックが解除されたときの処理
+            console.log('uncheck.bs.table:', row);
+
+        }).on('page-change.bs.table', function (e, number, size) {
+            // ページが変更（後）されたときの処理
+            console.log('page-change.bs.table:', number, size); //1開始
+
+        });
+
+
+    </script>
+}
