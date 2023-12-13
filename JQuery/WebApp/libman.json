@@ -121,6 +121,16 @@
         "dist/jquery.validate.unobtrusive.js",
         "dist/jquery.validate.unobtrusive.min.js"
       ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "bootstrap-input-spinner@3.3.3",
+      "destination": "wwwroot/lib/bootstrap-input-spinner/",
+      "files": [
+        "LICENSE",
+        "src/bootstrap-input-spinner.js",
+        "src/bootstrap-input-spinner.min.js"
+      ]
     }
   ]
 }
