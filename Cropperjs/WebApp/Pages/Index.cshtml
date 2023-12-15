@@ -10,6 +10,7 @@
             display: flex;
             /* flex-direction: row; */
             justify-content: flex-start;
+            align-items: flex-start;
             width: 258px; /* 画像のサイズ + 枠線の分 */
             height: 258px; /* 画像のサイズ + 枠線の分 */
             background: repeating-linear-gradient(45deg, #eee, #eee 2px, #fff 2px, #fff 4px);
@@ -26,6 +27,10 @@
 }
 
 <h1>Cropper.js基本</h1>
+
+<div class="img-container">
+    <img src="~/img/negi_green_onion600x300.png" class="img-origin" />
+</div>
 
 <div class="img-container">
     <img id="IdOriginIM" src="~/img/negi_green_onion600x300.png" class="img-origin" />
@@ -59,6 +64,8 @@
                 {
                     aspectRatio: 1 / 1,
                     viewMode: 0,
+                    // movable: true,
+                    zoomable: false,
                     // autoCropArea: 0.5,
                     crop(e) {
                         console.log(e.detail.x);
@@ -75,6 +82,7 @@
                     },
                 }
             );
+            cropper.moveTo(0, -20);
 
             $('#@nameof(EnumCropRatio.OneToOne)').prop('checked', true);
 
