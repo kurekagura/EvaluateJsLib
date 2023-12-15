@@ -39,7 +39,47 @@
       ]
     },
     {
-      "library": "bootstrap@5.1.0",
+      "library": "jquery@3.6.0",
+      "destination": "wwwroot/lib/jquery/",
+      "files": [
+        "dist/jquery.js",
+        "dist/jquery.min.js",
+        "dist/jquery.min.map",
+        "LICENSE.txt"
+      ]
+    },
+    {
+      "library": "jquery-validation@1.19.5",
+      "destination": "wwwroot/lib/jquery-validation/",
+      "files": [
+        "LICENSE.md",
+        "dist/additional-methods.js",
+        "dist/additional-methods.min.js",
+        "dist/jquery.validate.js",
+        "dist/jquery.validate.min.js"
+      ]
+    },
+    {
+      "library": "jquery-validation-unobtrusive@4.0.0",
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive/",
+      "files": [
+        "LICENSE.txt",
+        "dist/jquery.validate.unobtrusive.js",
+        "dist/jquery.validate.unobtrusive.min.js"
+      ]
+    },
+    {
+      "library": "bootstrap-detect-breakpoint@1.1.8",
+      "destination": "wwwroot/lib/bootstrap-detect-breakpoint/",
+      "files": [
+        "LICENSE",
+        "src/bootstrap-detect-breakpoint.js",
+        "src/bootstrap-detect-breakpoint.min.js"
+      ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "bootstrap@5.3.2",
       "destination": "wwwroot/lib/bootstrap/",
       "files": [
         "dist/css/bootstrap-grid.css",
@@ -87,36 +127,6 @@
         "dist/js/bootstrap.min.js",
         "dist/js/bootstrap.min.js.map",
         "LICENSE"
-      ]
-    },
-    {
-      "library": "jquery@3.6.0",
-      "destination": "wwwroot/lib/jquery/",
-      "files": [
-        "dist/jquery.js",
-        "dist/jquery.min.js",
-        "dist/jquery.min.map",
-        "LICENSE.txt"
-      ]
-    },
-    {
-      "library": "jquery-validation@1.19.5",
-      "destination": "wwwroot/lib/jquery-validation/",
-      "files": [
-        "LICENSE.md",
-        "dist/additional-methods.js",
-        "dist/additional-methods.min.js",
-        "dist/jquery.validate.js",
-        "dist/jquery.validate.min.js"
-      ]
-    },
-    {
-      "library": "jquery-validation-unobtrusive@4.0.0",
-      "destination": "wwwroot/lib/jquery-validation-unobtrusive/",
-      "files": [
-        "LICENSE.txt",
-        "dist/jquery.validate.unobtrusive.js",
-        "dist/jquery.validate.unobtrusive.min.js"
       ]
     }
   ]

@@ -1,0 +1,101 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+@section Heads{
+    <link rel="stylesheet" href="~/lib/cropperjs/dist/cropper.min.css" />
+    <style>
+        .img-container {
+            display: flex;
+            /* flex-direction: row; */
+            justify-content: flex-start;
+            width: 258px; /* 画像のサイズ + 枠線の分 */
+            height: 258px; /* 画像のサイズ + 枠線の分 */
+            background: repeating-linear-gradient(45deg, #eee, #eee 2px, #fff 2px, #fff 4px);
+            /* background-size: 8px 8px; */
+        }
+
+        .img-origin {
+            /* This rule is very important, please don't ignore this for cropper.js */
+            max-width: 100%;
+            object-fit: contain;
+            border: 1px solid #000;
+        }
+    </style>
+}
+
+<h1>Cropper.js基本</h1>
+
+<div class="img-container">
+    <img id="IdOriginIM" src="~/img/negi_green_onion600x300.png" class="img-origin" />
+</div>
+
+@foreach (EnumCropRatio s in Model.CropRatioRadios)
+{
+    <div class="form-check form-check-inline">
+        <input type="radio" asp-for="CropRatioRadios" value="@s.ToString()" id="@s.ToString()" class="form-check-input" />
+        <label for="@s.ToString()" class="form-check-label">@Html.DisplayTextFor(m=>@s)</label>
+    </div>
+}
+
+<div>
+    <button id="IdResetBT">reset</button>
+</div>
+<div>
+    <button id="IdDestroyBT">destroy</button>
+</div>
+
+<div class="img-container">
+    <img id="IdPreviewIM" class="img-origin" />
+</div>
+
+@section Scripts{
+    <script src="~/lib/cropperjs/dist/cropper.min.js"></script>
+    <script>
+        $(() => {
+            const cropper = new Cropper(
+                $('#IdOriginIM').get(0),
+                {
+                    aspectRatio: 1 / 1,
+                    viewMode: 0,
+                    // autoCropArea: 0.5,
+                    crop(e) {
+                        console.log(e.detail.x);
+                        console.log(e.detail.y);
+                        console.log(e.detail.width);
+                        console.log(e.detail.height);
+                        console.log(e.detail.rotate);
+                        console.log(e.detail.scaleX);
+                        console.log(e.detail.scaleY);
+                        console.log({ x: e.detail.x, y: e.detail.y, width: e.detail.width, height: e.detail.height });
+                        const croppedCanvas = cropper.getCroppedCanvas();
+                        //dataURLはURL.revokeObjectURL不要。
+                        $('#IdPreviewIM').attr('src', croppedCanvas.toDataURL());
+                    },
+                }
+            );
+
+            $('#@nameof(EnumCropRatio.OneToOne)').prop('checked', true);
+
+            $('input[name="@nameof(Model.CropRatioRadios)"]').on('change', function (event) {
+                const selVal = event.target.value;
+                console.log(selVal);
+                if (selVal === '@nameof(EnumCropRatio.OneToOne)') {
+                    cropper.setAspectRatio(1 / 1);
+                } else if (selVal === '@nameof(EnumCropRatio.SixteenToNine)') {
+                    cropper.setAspectRatio(16 / 9);
+                } else if (selVal === '@nameof(EnumCropRatio.Free)') {
+                    cropper.setAspectRatio(NaN);
+                }
+            });
+
+            $('#IdDestroyBT').on('click', function () {
+                cropper.destroy();
+            });
+            $('#IdResetBT').on('click', function () {
+                cropper.reset();
+            });
+        });
+    </script>
+}
