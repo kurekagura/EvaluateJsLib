@@ -1,0 +1,62 @@
+﻿@page
+@model WebApp.Pages.Save.IndexModel
+@{
+    var saveHandlerUrl = Url.Page("/Save/Index", "SaveData");
+    var test = string.Empty;
+    var BTN_TEXT = "保存";
+    var BTN_TEXT_SAVING = "保存";
+    //var BTN_TEXT = "Save";
+    //var BTN_TEXT_SAVING = "Save";
+}
+
+<h1>Save時の感じ</h1>
+
+@* ボタン幅が多言語化で困るかも *@
+<button class="btn btn-primary" type="button"
+    @* style="width:100px" *@
+    id="IdSaveBT">
+    <span class="bi bi-save" aria-hidden="true"></span>
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
+    <span class="save-text">@BTN_TEXT</span>
+</button>
+
+@section Scripts {
+    <script type="text/javascript" charset="utf-8">
+        $('#IdSaveBT').on('click', function (e) {
+            console.log(this);
+            $(this).prop('disabled', true);
+            $(this).children(".bi-save").hide();
+            $(this).children(".spinner-border").show();
+            $(this).children(".save-text").text('@Html.Raw(BTN_TEXT_SAVING)');
+
+            $.blockUI({
+                message: null, overlayCSS: {
+                    backgroundColor: '#ccc',  // 薄いグレーに設定
+                    opacity: 0.4
+                }
+            });
+
+            fetch('@saveHandlerUrl', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                // body: JSON.stringify({ data: 'data' })
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                } else {
+                    console.log('OK');
+                }
+                $(this).prop('disabled', false);
+                $(this).children(".bi-save").show();
+                $(this).children(".spinner-border").hide();
+                $(this).children(".save-text").text('@Html.Raw(BTN_TEXT)');
+                $.unblockUI();
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+    </script>
+}

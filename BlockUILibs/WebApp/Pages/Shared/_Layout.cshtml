@@ -19,7 +19,7 @@
     <title>@ViewData["Title"] - Sidebar</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="~/lib/paginationjs/dist/pagination.min.css">
+    @* <link rel="stylesheet" href="~/lib/paginationjs/dist/pagination.min.css"> *@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true" /> 
     @await RenderSectionAsync("Styles", required: false)
@@ -60,9 +60,9 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link align-left px-0" asp-area="" asp-page="/Privacy">
+                            <a class="nav-link align-left px-0" asp-area="" asp-page="/Save/Index">
                                 <i class="fs-4 bi-table"></i>
-                                <span class="@dnone mx-1" style="white-space: nowrap;">プライバシー</span>
+                                <span class="@dnone mx-1" style="white-space: nowrap;">Save</span>
                             </a>
                         </li>
                     </ul>
@@ -109,7 +109,8 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/paginationjs/dist/pagination.min.js"></script>
+    <script src="~/lib/jquery-blockui/jquery.blockUI.min.js"></script>
+    @* <script src="~/lib/paginationjs/dist/pagination.min.js"></script> *@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)

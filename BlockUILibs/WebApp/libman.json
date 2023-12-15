@@ -19,6 +19,7 @@
         "icons/cloud-upload.svg",
         "icons/cpu.svg",
         "icons/database.svg",
+        "icons/save.svg",
         "icons/house.svg",
         "icons/list-task.svg",
         "icons/table.svg"
@@ -104,29 +105,27 @@
         "dist/jquery.validate.unobtrusive.js",
         "dist/jquery.validate.unobtrusive.min.js"
       ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "jquery-blockui@2.7.0",
+      "destination": "wwwroot/lib/jquery-blockui/",
+      "files": [
+        "jquery.blockUI.js",
+        "jquery.blockUI.min.js"
+      ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "freezeui@1.0.1",
+      "destination": "wwwroot/lib/freezeui/",
+      "files": [
+        "freeze-ui.js",
+        "freeze-ui.min.js",
+        "freeze-ui.css",
+        "freeze-ui.min.css",
+        "LICENSE.md"
+      ]
     }
-  ,
-{
-  "provider": "jsdelivr",
-  "library": "jquery-blockui@2.7.0",
-  "destination": "wwwroot/lib/jquery-blockui/",
-  "files": [
-    "jquery.blockUI.js",
-    "jquery.blockUI.min.js"
   ]
-}
-,
-{
-  "provider": "jsdelivr",
-  "library": "freezeui@1.0.1",
-  "destination": "wwwroot/lib/freezeui/",
-  "files": [
-    "freeze-ui.js",
-    "freeze-ui.min.js",
-    "freeze-ui.css",
-    "freeze-ui.min.css",
-    "LICENSE.md"
-  ]
-}
-]
 }

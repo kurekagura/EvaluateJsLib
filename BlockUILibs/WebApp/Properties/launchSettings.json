@@ -3,7 +3,7 @@
     "http": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "Index",
+      "launchUrl": "Save/Index",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
