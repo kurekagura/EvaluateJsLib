@@ -1,0 +1,61 @@
+﻿@page
+@model WebApp.Pages.FormData.IndexModel
+@{
+}
+
+<h1>formタグの併用</h1>
+<p>チェックされた行データを取得</p>
+
+<form id="IFMTable1">
+    <table id="IdTA1"
+           data-toggle="table"
+           data-pagination="true"
+           data-single-select="true"
+           data-click-to-select="true"
+           data-cache="false"
+           @* form内のcheckedをFormData（btSelectItemの値）として取得する際に必須 *@
+           data-id-field="UserID"
+           @* getRowByUniqueId利用に必須 *@
+           data-unique-id="UserID"
+           data-url="@Url.Content("~/deposit.json")">
+        <thead>
+            <tr>
+                @* <th data-field="state" data-checkbox="true"></th> *@
+                @* 存在しないdata-fieldを指定すると頁変更でチェックが外れる *@
+                <th data-checkbox="true"></th>
+                <th data-field="UserID" data-sortable="true">ユーザーId</th>
+                <th data-field="RegistrationDate">登録日</th>
+                <th data-field="Name">氏名</th>
+                <th data-field="Gender">性別</th>
+            </tr>
+        </thead>
+    </table>
+
+</form>
+
+<button type="button" class="btn btn-primary" id="IBTGetChecked">チェック取得</button>
+
+@section Scripts{
+    <script>
+        $(() => {
+
+            $('#IBTGetChecked').on('click',function () {
+                const fd = new FormData($('#IFMTable1')[0]);
+                fd.forEach((value, key) => {
+                    console.log(key + ': ' + value);
+                });
+                //name="btSelectItem"となっている。
+                const selectedId = fd.get('btSelectItem');
+                console.log('btSelectItem', selectedId);
+
+                //行データを取得
+                const selectedRow = $('#IdTA1').bootstrapTable('getRowByUniqueId', selectedId);
+                console.log(selectedRow);
+
+                //const selected = $('#IFMTable1').serialize();
+                //console.log(selected);
+            })
+        });
+
+    </script>
+}
