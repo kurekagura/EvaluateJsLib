@@ -1,0 +1,223 @@
+﻿@page
+@model WebApp.Pages.Crop.IndexModel
+@{
+}
+@section Heads{
+    <style>
+        .img-container {
+            display: flex;
+            /* flex-direction: row; */
+            justify-content: flex-start;
+            align-items: flex-start;
+            width: 300px; /* 画像のサイズ + 枠線の分 */
+            height: 300px; /* 画像のサイズ + 枠線の分 */
+            background: repeating-linear-gradient(45deg, #eee, #eee 2px, #fff 2px, #fff 4px);
+            /* background-size: 8px 8px; */
+        }
+
+        .img-origin {
+            /* This rule is very important, please don't ignore this for cropper.js */
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            /* border: 1px solid #000; */
+        }
+    </style>
+}
+
+<h1>Fabric.js(Crop)</h1>
+<p1>img要素を使わず、Imageを使う</p1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            @* Crop後のプレビュー用 *@
+            <div class="img-container">
+                <img id="IdPreviewIM" class="img-origin" alt="preview image" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            @* Crop前の画像用（img要素ではない） *@
+            <div id="IdCanvasDI" class="img-container">
+                <canvas id="IdCanvas"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <button id="IdResetBT">reset</button>
+</div>
+<div>
+    <button id="IdDestroyBT">destroy</button>
+</div>
+
+@section Scripts{
+    <script>
+
+        // クロップ後の背景は？
+        //const rect = { left: 50, top: 50, width: 100, height: 100 }; // クロップする範囲を設定
+        function cropImage(originalImage, rect) {
+            const croppedCanvas = document.createElement('canvas');
+
+            croppedCanvas.width = rect.width;
+            croppedCanvas.height = rect.height;
+
+            const context = croppedCanvas.getContext('2d');
+
+            context.drawImage(originalImage, rect.left, rect.top, rect.width, rect.height, 0, 0, rect.width, rect.height);
+
+            const dataUrl = croppedCanvas.toDataURL('image/png');
+            return dataUrl;
+        }
+
+        //クロップ領域以外は黒で埋める
+        function createCropImage(originalImage, origin_width, origin_height, rect) {
+            const croppedCanvas = document.createElement('canvas');
+
+            //サーバから取得時（元画像）のサイズが必須。
+            console.log('クロップ用canvas設定サイズ', origin_width, origin_height);
+            croppedCanvas.width = origin_width;
+            croppedCanvas.height = origin_height;
+
+            const context = croppedCanvas.getContext('2d');
+
+            // まずはキャンバス全体を黒で塗りつぶす
+            context.fillStyle = 'black';
+            context.fillRect(0, 0, croppedCanvas.width, croppedCanvas.height);
+
+            // クロップ領域だけを元画像から切り出して描画
+            context.drawImage(originalImage, rect.left, rect.top, rect.width, rect.height, rect.left, rect.top, rect.width, rect.height);
+
+            const dataUrl = croppedCanvas.toDataURL('image/png');
+            return dataUrl;
+        }
+
+        function calcFitSquareRatio(width, height, fitLength) {
+            // アスペクト比を計算
+            const aspectRatio = width / height;
+
+            // 縦横が fitLength の正方形に一致している場合、拡大・縮小不要
+            if (width === fitLength && height === fitLength) {
+                return 1;
+            }
+
+            // 縦横どちらかが fitLength よりも大きい場合、縮小が必要
+            if (width > fitLength || height > fitLength) {
+                return fitLength / Math.max(width, height);
+            }
+
+            // 縦横どちらも fitLength よりも小さい場合、拡大が必要
+            if (width < fitLength && height < fitLength) {
+                return fitLength / Math.max(width, height);
+            }
+        }
+
+
+        $(() => {
+
+            //img要素を存在させない方法
+            const img = new Image();
+
+            //img.src = '@Url.Content("~/img/negi_green_onion600x300.png")';
+            img.src = '@Url.Content("~/img/negi_green_onion300x600.png")';
+            
+            $(img).on('load', function (e) {
+                console.log('load!');
+
+                //Imageオブジェクト
+                var imgObj = e.target;
+                console.log('受信画像サイズ', imgObj.width, imgObj.height);
+
+                //表示サイズ（ここではw:300, h:300）にフィットさせる拡大縮小率が必要
+                const origin_width = imgObj.width;
+                const origin_height = imgObj.height;
+                const scale = calcFitSquareRatio(origin_width, origin_height, 300);
+                console.log('アスペクトフィット', scale);
+                //サイズ変更
+                imgObj.width = imgObj.width * scale;
+                imgObj.height = imgObj.height * scale;
+                console.log('拡大縮小後（フィット）', imgObj.width, imgObj.height);
+
+                console.log(`${imgObj.width},${imgObj.height}`);
+
+                //img要素でなくImageの場合はclientWidth/clientHeightは0なので利用不可
+                const squareLen = Math.max(imgObj.width, imgObj.height);
+                console.log('squareLen', squareLen);
+
+                console.log(e.target);
+                var canvas = new fabric.Canvas('IdCanvas');
+                console.log('fablic.Canvasの設定サイズ', imgObj.width, imgObj.height);
+                canvas.setWidth(imgObj.width);
+                canvas.setHeight(imgObj.height);
+                // var canvasContainer = document.getElementById('IdCanvasDI');
+
+                var fabImg = new fabric.Image(imgObj, {
+                    selectable: false,
+                    left: 0,
+                    top: 0
+                });
+
+                //縦長横長で違える。
+                if (imgObj.width > imgObj.height) {
+                    fabImg.scaleToWidth(squareLen);
+                } else {
+                    fabImg.scaleToHeight(squareLen);
+                }
+
+                canvas.add(fabImg); //canvasへFabricImage追加
+
+                var rect = new fabric.Rect({
+                    left: imgObj.width / 4,
+                    top: imgObj.height / 4,
+                    width: imgObj.width / 2,
+                    height: imgObj.height / 2,
+                    fill: 'transparent',
+                    stroke: 'red',
+                    strokeWidth: 1,
+                    strokeUniform: true,
+                    lockRotation: true
+                });
+                rect.setControlVisible('mtr', false); // 回転コントロールを非表示
+                canvas.add(rect);
+
+                rect.on('modified', function (options) {
+                    console.log('modified');
+                    const t = options.target;
+                    console.log(t.aCoords);
+                    console.log(t.lineCoords);
+                    // const c = t.aCoords;
+                    const c = t.lineCoords;
+
+                    const left = c.tl.x;
+                    const top = c.tl.y;
+                    const width = c.tr.x - c.tl.x;
+                    const height = c.bl.y - c.tl.y;
+                    console.log(`left:${left},top:${top},width:${width},height:${height}`);
+
+                    //掛け値が重要
+                    const inv_scale = 1 / scale;
+                    console.log('inverse scale', inv_scale);
+                    const cropRect = { left: left * inv_scale, top: top * inv_scale, width: width * inv_scale, height: height * inv_scale };
+
+                    //Imageオブジェクトもimg要素と同じように扱える
+                    //const previewDataUrl = cropImage(imgElem, cropRect);
+                    const previewDataUrl = createCropImage(imgObj, origin_width, origin_height, cropRect);
+                    //img要素に設定
+                    $('#IdPreviewIM').attr('src', previewDataUrl);
+                    console.log('cropRect(サーバ取得時の原画基準)', cropRect);
+                });
+
+                //初期化時にマニュアル発火
+                rect.fire('modified', { target: rect });
+            });
+
+            $('#IdDestroyBT').on('click', function () {
+                //cropper.destroy();
+            });
+            $('#IdResetBT').on('click', function () {
+                //cropper.reset();
+            });
+        });
+    </script>
+}
