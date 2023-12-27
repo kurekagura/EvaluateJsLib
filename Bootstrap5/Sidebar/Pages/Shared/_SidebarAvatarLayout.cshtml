@@ -28,12 +28,16 @@
     <link rel="stylesheet" href="~/Sidebar.styles.css" asp-append-version="true" />
     <style>
         .nav-link:hover {
-            background-color: #e0e0e0; /* ホバー時の背景色を指定 */
+            background-color: #e0e0e0;
         }
 
-/*         #_idtoggle:hover{
-            background-color: #e0e0e0; /* ホバー時の背景色を指定 */
-        } */
+        #_idtoggle {
+            border: none;
+            background-color: transparent;
+        }
+        #_idtoggle:hover {
+            background-color: rgba(224, 224, 224, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -42,18 +46,23 @@
         <div class="row flex-nowrap">
 
             <div class="col-auto bg-light">
-                <div class="row">
+                
+                @* <div class="row">
                     <!--クリック領域の右寄せにこれ重要-->
                     <div style="text-align: right;">
-                        <!-- toggler -->
                         <a id="_idtoggle" onclick="toggleSidebar('_idtoggle','_idmenu','_idavatar')">
                             <i class="fs-4 bi @arrows_angle_x" style="display: inline-block;"></i>
                         </a>
-@*                         <button id="_idtoggle" class="btn" onclick="toggleSidebar('_idtoggle','_idmenu','_idavatar')">
-                            <i class="fs-4 bi @arrows_angle_x" style="display: inline-block;"></i>
-                        </button> *@
                     </div>
+                </div> *@
+
+                @* buttonでよりシンプルに実装 *@
+                <div class="text-end">
+                    <button id="_idtoggle" type="button" onclick="toggleSidebar('_idtoggle','_idmenu','_idavatar')" title="toggle menu">
+                        <i class="fs-4 bi @arrows_angle_x"></i>
+                    </button>
                 </div>
+
                 <div class="d-flex flex-column align-items-sm-start text-white min-vh-100" style="padding-bottom: 2rem;padding-right:0!important">
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-sm-start" id="_idmenu">
                         <li class="nav-item w-100">
