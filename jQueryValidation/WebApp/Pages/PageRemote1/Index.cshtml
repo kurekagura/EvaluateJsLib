@@ -1,0 +1,23 @@
+﻿@page
+@model WebApp.Pages.PageRemote1.IndexModel
+@{
+}
+
+<h1>PageRemote</h1>
+
+<form method="post">
+    <div>
+        <input asp-for="UserName" data-val="true"/>
+        <span asp-validation-for="UserName"></span>
+    </div>
+    <div>
+        <button type="submit">登録</button>
+    </div>
+</form>
+
+@section Scripts {
+    @* <partial name="_ValidationScriptsPartial" /> *@
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,27 @@
+﻿@page
+@model WebApp.Pages.Basic1.IndexModel
+@{
+}
+
+<h1>基本</h1>
+
+<form method="post">
+    <div>
+        <input asp-for="UserName" />
+        <span asp-validation-for="UserName"></span>
+    </div>
+    <div>
+        <input asp-for="Age" />
+        <span asp-validation-for="Age"></span>
+    </div>
+    <div>
+        <button type="submit">登録</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
+
+    @* <partial name="_ValidationScriptsPartial" /> *@
+}

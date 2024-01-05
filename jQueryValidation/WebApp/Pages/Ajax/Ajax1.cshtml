@@ -1,0 +1,68 @@
+﻿@page
+@model WebApp.Pages.Ajax.Ajax1Model
+@{
+    var handlerUrl = Url.Page(pageName: "/Ajax/Ajax1", pageHandler: "CHeckUserName");
+}
+
+<h1>Ajax</h1>
+
+<form method="post" id="IdForm">
+    <div>
+        <input asp-for="UserName" />
+        <span asp-validation-for="UserName"></span>
+    </div>
+    <div>
+        <input asp-for="Age" />
+        <span asp-validation-for="Age"></span>
+    </div>
+    <div>
+        <button type="button" id="IdAddBT">登録</button>
+    </div>
+</form>
+
+@section Scripts {
+    @*     @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    } *@
+
+    <script>
+        $(() => {
+            console.log('doc ready.');
+            $('#IdAddBT').on('click', function () {
+                const $form = $('#IdForm');
+                clearValidationErrors($form);
+
+                // const $inpUserName = $('#@nameof(Model.UserName)');
+                // const $inpAge = $('#@nameof(Model.Age)');
+                // console.log($inpUserName, $inpAge);
+
+                const valUserName = $('#@nameof(Model.UserName)').val();
+                const valAge = $('#@nameof(Model.Age)').val();
+                // console.log(valUserName, valAge);
+
+                const postJsonData = {
+                    UserName: valUserName,
+                    Age: valAge
+                };
+                console.log(postJsonData);
+                fetchPostAsync('@handlerUrl', postJsonData)
+                    .then(data => {
+                        if (data === null) {
+                            console.log('検証成功', data);
+                        } else {
+                            console.log('検証失敗', data);
+                            const elemNames = data.memberNames;
+                            const errorMessage = data.errorMessage;
+
+                            elemNames.forEach(function (name) {
+                                const $inputElem = $form.find('[name="' + name + '"]');
+                                showValidationError($form, $inputElem, errorMessage);
+                            });
+                        }
+                    }).catch(error => {
+                        console.log('error', error);
+                    });
+            });
+        });
+    </script>
+}
