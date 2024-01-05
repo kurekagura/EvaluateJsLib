@@ -30,6 +30,13 @@ namespace WebApp.Pages.Partial
                 errors.Add(new ValidationResult(regEx.ErrorMessage, new[] { nameof(LabelName) }));
                 return new JsonResult(errors) { StatusCode = (int)HttpStatusCode.Accepted };
             }
+
+            if (inputData.LabelNames.Contains(inputData.LabelName))
+            {
+                errors.Add(new ValidationResult("ä˘Ç…í«â¡çœÇ›Ç≈Ç∑ÅB", new[] { nameof(LabelName) }));
+                return new JsonResult(errors) { StatusCode = (int)HttpStatusCode.Accepted };
+            }
+
             return Partial("_LabelPartial", inputData.LabelName);
         }
     }
@@ -37,5 +44,6 @@ namespace WebApp.Pages.Partial
     public class JsonPostData
     {
         public string LabelName { get; set; } = default!;
+        public List<string> LabelNames { get; set; } = new();
     }
 }

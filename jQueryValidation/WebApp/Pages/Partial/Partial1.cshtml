@@ -19,6 +19,8 @@
 
 <section id="IdSE"></section>
 
+<button type="button" id="IdUploadBT">アップロード</button>
+
 @section Scripts {
     @*     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
@@ -30,15 +32,28 @@
             $('#IdAddBT').on('click', function () {
                 $form = $('#IdForm');
                 clearValidationErrorsVanilla($form.get(0));
+                $sec = $('#IdSE');
+                var $hiddenInputs = $sec.find('input[type="hidden"][name="LabelNames"]');
+
+                // 取得した各 input 要素の value を配列に格納
+                var labels = [];
+
+                $hiddenInputs.each(function () {
+                    labels.push(this.value);
+                });
+
+                // values 配列には各 input 要素の value が含まれる
+                console.log(labels);
 
                 const postJsonData = {
-                    LabelName: $('#LabelName').val()
+                    LabelName: $('#LabelName').val(),
+                    LabelNames: labels
                 };
                 console.log(postJsonData);
                 fetchHtmlDOMPostAsync('@handlerUrl', postJsonData)
                     .then(result => {
                         if (result.status === 200) {
-                            $('#IdSE').append(result.data);
+                            $sec.append(result.data);
                         } else if (result.status === 202) {
                             showValidationErrorsVanilla($form.get(0), result.data);
                         }
