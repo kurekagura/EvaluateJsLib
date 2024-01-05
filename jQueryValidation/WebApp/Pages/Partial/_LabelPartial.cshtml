@@ -1,0 +1,14 @@
+﻿@model string
+@{
+    Random random = new Random();
+    int red = random.Next(256);
+    int green = random.Next(256);
+    int blue = random.Next(256);
+
+    // RGB形式の文字列に組み立て
+    string rgbString = $"rgb({red},{green},{blue})";
+}
+
+<h2>Label:@Model</h2>
+<div style="height:100px;background-color:@rgbString;">
+</div>

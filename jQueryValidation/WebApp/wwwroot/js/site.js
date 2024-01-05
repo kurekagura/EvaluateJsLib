@@ -102,3 +102,45 @@ function fetchPostAsync(url, jsonObj, antiXsrfToken) {
         });
     });
 }
+
+/**
+* jsonを非同期で送信する関数。HtmlDOMを応答するAPI用。
+* 但し検証エラーの際は202でJSONを応答する。
+* @param {string} url - POSTするURL
+* @param {HTMLElement} jsonObj - 送信するJSONオブジェクト
+* @param {string} antiXsrfToken - CSRFトークン
+* @returns {Promise} - フェッチリクエストのPromiseオブジェクト
+*/
+function fetchHtmlDOMPostAsync(url, jsonObj, antiXsrfToken) {
+    return new Promise((resolve, reject) => {
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(jsonObj),
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': antiXsrfToken
+            }
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            } else {
+                if (response.status === 200) {
+                    response.text().then(htmlText => {
+                        const parser = new DOMParser();
+                        const htmlDOM = parser.parseFromString(htmlText, 'text/html'); //<html><body>が付与されるので除外
+                        const targetDOM = htmlDOM.querySelector('body').children;
+                        resolve({ status: response.status, data: targetDOM });
+                    });
+                } else if (response.status === 202) {
+                    response.json().then(jsonObj => {
+                        resolve({ status: response.status, data: jsonObj });
+                    });
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            }
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}

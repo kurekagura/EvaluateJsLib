@@ -1,0 +1,52 @@
+﻿@page
+@model WebApp.Pages.Partial.Partial1Model
+@{
+    var handlerUrl = Url.Page(pageName: "/Partial/Partial1", pageHandler: "AddLabel");
+    //var handlerUrl = "/nothing";
+}
+
+<h1>AjaxでPOST、Partialビューを取得・追加</h1>
+
+<form method="post" id="IdForm">
+    <div>
+        <input asp-for="LabelName" />
+        <span asp-validation-for="LabelName"></span>
+    </div>
+    <div>
+        <button type="button" id="IdAddBT">追加</button>
+    </div>
+</form>
+
+<section id="IdSE"></section>
+
+@section Scripts {
+    @*     @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    } *@
+
+    <script>
+        $(() => {
+            console.log('doc ready.');
+            $('#IdAddBT').on('click', function () {
+                $form = $('#IdForm');
+                clearValidationErrors($form);
+
+                const postJsonData = {
+                    LabelName: $('#LabelName').val()
+                };
+                console.log(postJsonData);
+                fetchHtmlDOMPostAsync('@handlerUrl', postJsonData)
+                    .then(result => {
+                        if (result.status === 200) {
+                            $('#IdSE').append(result.data);
+                        } else if (result.status === 202) {
+                            showValidationErrors($form, result.data);
+                        }
+                    }).catch(error => {
+                        console.log('error', error);
+                        alert('通信エラー');
+                    });
+            });
+        });
+    </script>
+}

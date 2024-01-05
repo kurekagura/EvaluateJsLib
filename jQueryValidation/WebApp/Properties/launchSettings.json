@@ -3,7 +3,7 @@
     "http": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "Ajax/Ajax1",
+      "launchUrl": "Partial/Partial1",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
