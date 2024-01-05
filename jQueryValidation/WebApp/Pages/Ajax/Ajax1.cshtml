@@ -32,10 +32,6 @@
                 const $form = $('#IdForm');
                 clearValidationErrors($form);
 
-                // const $inpUserName = $('#@nameof(Model.UserName)');
-                // const $inpAge = $('#@nameof(Model.Age)');
-                // console.log($inpUserName, $inpAge);
-
                 const valUserName = $('#@nameof(Model.UserName)').val();
                 const valAge = $('#@nameof(Model.Age)').val();
                 // console.log(valUserName, valAge);
@@ -46,17 +42,19 @@
                 };
                 console.log(postJsonData);
                 fetchPostAsync('@handlerUrl', postJsonData)
-                    .then(data => {
-                        if (data === null) {
-                            console.log('検証成功', data);
+                    .then(valErrors => {
+                        if (valErrors === null) {
+                            console.log('検証成功', valErrors);
                         } else {
-                            console.log('検証失敗', data);
-                            const elemNames = data.memberNames;
-                            const errorMessage = data.errorMessage;
+                            console.log('検証失敗', valErrors);
+                            valErrors.forEach(function (valError) {
+                                const elemNames = valError.memberNames;
+                                const errorMessage = valError.errorMessage;
 
-                            elemNames.forEach(function (name) {
-                                const $inputElem = $form.find('[name="' + name + '"]');
-                                showValidationError($form, $inputElem, errorMessage);
+                                elemNames.forEach(function (name) {
+                                    const $inputElem = $form.find('[name="' + name + '"]');
+                                    showValidationError($form, $inputElem, errorMessage);
+                                });
                             });
                         }
                     }).catch(error => {

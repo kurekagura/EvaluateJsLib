@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace WebApp.Pages.Ajax
 {
@@ -37,29 +38,26 @@ namespace WebApp.Pages.Ajax
         {
             var list = new[] { "user1", "user2" };
 
+            //必ず配列で戻す⇒JavaScript側の一貫性
+            var errors = new List<ValidationResult>();
+
+            var required = new RequiredAttribute();
+            required.ErrorMessage = "{0}は入力が必須です。";
+            if (!required.IsValid(inputData.UserName))
             {
-                var attr = new RequiredAttribute();
-                attr.ErrorMessage = "{0}は必須です。";
-                if (inputData == null || !attr.IsValid(inputData.UserName))
-                {
-                    var vr = new ValidationResult(attr.FormatErrorMessage("名前"), new[] { nameof(UserName) });
-                    return new JsonResult(vr); //UserName_Required
-                }
+                errors.Add(new ValidationResult(required.FormatErrorMessage("名前"), new[] { nameof(UserName) }));
             }
+            if (!required.IsValid(inputData.Age))
             {
-                var attr = new RequiredAttribute();
-                attr.ErrorMessage = "{0}は必須です。";
-                if (!attr.IsValid(inputData.Age))
-                {
-                    return new JsonResult(new ValidationResult(attr.FormatErrorMessage("年齢"), new[] { nameof(Age) }));
-                }
+                errors.Add(new ValidationResult(required.FormatErrorMessage("年齢"), new[] { nameof(Age) }));
             }
-            
+            if (errors.Count > 0)
+                return new JsonResult(errors);
 
             if (list.Contains(inputData.UserName))
             {
-                var vr = new ValidationResult($"「{inputData.UserName}」は既に存在します。", new[] { nameof(UserName) });
-                return new JsonResult(vr); //UserName_PageRemote
+                errors.Add(new ValidationResult($"「{inputData.UserName}」は既に存在します。", new[] { nameof(UserName) }));
+                return new JsonResult(errors);
             }
             else
             {
@@ -71,6 +69,8 @@ namespace WebApp.Pages.Ajax
     public class JsonPostData
     {
         public string? UserName { get; set; } = default!;
+
+        [JsonConverter(typeof(JsonNullableIntConverter))]
         public int? Age { get; set; } = default!;
     }
 }
