@@ -29,7 +29,7 @@
             console.log('doc ready.');
             $('#IdAddBT').on('click', function () {
                 $form = $('#IdForm');
-                clearValidationErrors($form);
+                clearValidationErrorsVanilla($form.get(0));
 
                 const postJsonData = {
                     LabelName: $('#LabelName').val()
@@ -40,7 +40,7 @@
                         if (result.status === 200) {
                             $('#IdSE').append(result.data);
                         } else if (result.status === 202) {
-                            showValidationErrors($form, result.data);
+                            showValidationErrorsVanilla($form.get(0), result.data);
                         }
                     }).catch(error => {
                         console.log('error', error);

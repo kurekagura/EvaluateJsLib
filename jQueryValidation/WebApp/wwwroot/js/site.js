@@ -23,6 +23,27 @@ function clearValidationErrors($root) {
     });
 }
 
+function clearValidationErrorsVanilla(rootElem) {
+    // rootElem 要素の子孫で 'data-valmsg-for' 属性を持つ要素を取得
+    var containers = rootElem.querySelectorAll('[data-valmsg-for]');
+
+    // 各要素の中身を空にする
+    containers.forEach(function (container) {
+        container.innerHTML = '';
+    });
+
+    // input-validation-error クラスを持つ要素からクラスを削除する
+    containers.forEach(function (container) {
+        var name = container.getAttribute('data-valmsg-for');
+        var inputElem = rootElem.querySelector('[name="' + name + '"]');
+
+        if (inputElem) {
+            inputElem.classList.remove("input-validation-error");
+        }
+    });
+}
+
+
 function showValidationErrors($root, validationErrors) {
     validationErrors.forEach(function (valError) {
         const elemNames = valError.memberNames;
@@ -35,18 +56,52 @@ function showValidationErrors($root, validationErrors) {
     });
 }
 
-function showValidationError($root, $inputElement, errorMessage) {  // 'this' is the form element
+function showValidationErrorsVanilla(rootElem, validationErrors) {
+    validationErrors.forEach(function (valError) {
+        var elemNames = valError.memberNames;
+        var errorMessage = valError.errorMessage;
+
+        elemNames.forEach(function (name) {
+            var inputElem = rootElem.querySelector('[name="' + name + '"]');
+            if (inputElem) {
+                showValidationErrorVanilla(rootElem, inputElem, errorMessage);
+            }
+        });
+    });
+}
+
+function showValidationError($root, $input, errorMessage) {  // 'this' is the form element
     const $error = $('<span>', {
-        id: `${$inputElement[0].name}-error`,
+        id: `${$input[0].name}-error`,
         class: '',
         text: errorMessage
     });
     //jQueryValidateではinput-validation-errorが付与されるのであわせる。
-    $inputElement.removeClass("input-validation-error").addClass("input-validation-error");
-    const container = $root.find("[data-valmsg-for='" + escapeAttributeValue($inputElement[0].name) + "']");
+    $input.removeClass("input-validation-error").addClass("input-validation-error");
+    const container = $root.find("[data-valmsg-for='" + escapeAttributeValue($input[0].name) + "']");
     container.removeClass("field-validation-valid").addClass("field-validation-error");
     container.empty();
     $error.removeClass("input-validation-error").appendTo(container);
+}
+
+function showValidationErrorVanilla(rootElem, inputElem, errorMessage) {
+    // エラーメッセージの表示用要素を作成
+    var errorSpan = document.createElement('span');
+    errorSpan.id = inputElem.name + '-error';
+    errorSpan.textContent = errorMessage;
+
+    // inputElem にクラスを追加
+    inputElem.classList.remove("input-validation-error");
+    inputElem.classList.add("input-validation-error");
+
+    // エラーコンテナの取得
+    var container = rootElem.querySelector('[data-valmsg-for="' + escapeAttributeValue(inputElem.name) + '"]');
+
+    // クラスの追加・削除とエラーメッセージの設定
+    container.classList.remove("field-validation-valid");
+    container.classList.add("field-validation-error");
+    container.innerHTML = '';
+    container.appendChild(errorSpan);
 }
 
 /**
