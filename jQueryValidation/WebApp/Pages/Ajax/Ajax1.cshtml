@@ -47,15 +47,16 @@
                             console.log('検証成功', valErrors);
                         } else {
                             console.log('検証失敗', valErrors);
-                            valErrors.forEach(function (valError) {
-                                const elemNames = valError.memberNames;
-                                const errorMessage = valError.errorMessage;
+                            showValidationErrors($form, valErrors);
+                            // valErrors.forEach(function (valError) {
+                            //     const elemNames = valError.memberNames;
+                            //     const errorMessage = valError.errorMessage;
 
-                                elemNames.forEach(function (name) {
-                                    const $inputElem = $form.find('[name="' + name + '"]');
-                                    showValidationError($form, $inputElem, errorMessage);
-                                });
-                            });
+                            //     elemNames.forEach(function (name) {
+                            //         const $inputElem = $form.find('[name="' + name + '"]');
+                            //         showValidationError($form, $inputElem, errorMessage);
+                            //     });
+                            // });
                         }
                     }).catch(error => {
                         console.log('error', error);

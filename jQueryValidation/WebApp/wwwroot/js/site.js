@@ -12,6 +12,27 @@ function clearValidationErrors($root) {
     // $root 要素の子孫で 'data-valmsg-for' 属性を持つ要素を取得
     var $containers = $root.find('[data-valmsg-for]');
     $containers.empty();　// 各要素の中身を空にする
+
+    //showValidationErrorでinput-validation-errorが付与されるので削除する。
+    var nameArray = $containers.map(function () {
+        return $(this).attr('data-valmsg-for');
+    }).get();
+    nameArray.forEach(function (name) {
+        const $inputElem = $root.find('[name="' + name + '"]');
+        $inputElem.removeClass("input-validation-error");
+    });
+}
+
+function showValidationErrors($root, validationErrors) {
+    validationErrors.forEach(function (valError) {
+        const elemNames = valError.memberNames;
+        const errorMessage = valError.errorMessage;
+
+        elemNames.forEach(function (name) {
+            const $inputElem = $root.find('[name="' + name + '"]');
+            showValidationError($root, $inputElem, errorMessage);
+        });
+    });
 }
 
 function showValidationError($root, $inputElement, errorMessage) {  // 'this' is the form element
@@ -20,7 +41,8 @@ function showValidationError($root, $inputElement, errorMessage) {  // 'this' is
         class: '',
         text: errorMessage
     });
-
+    //jQueryValidateではinput-validation-errorが付与されるのであわせる。
+    $inputElement.removeClass("input-validation-error").addClass("input-validation-error");
     const container = $root.find("[data-valmsg-for='" + escapeAttributeValue($inputElement[0].name) + "']");
     container.removeClass("field-validation-valid").addClass("field-validation-error");
     container.empty();
