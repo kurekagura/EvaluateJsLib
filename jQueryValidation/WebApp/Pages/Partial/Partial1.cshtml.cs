@@ -24,7 +24,7 @@ namespace WebApp.Pages.Partial
                 return new JsonResult(errors) { StatusCode = (int)HttpStatusCode.Accepted };
             }
 
-            var regEx = new RegularExpressionAttribute(@"^[^/\\]*$") { ErrorMessage = "'/' '\\'‚ğŠÜ‚Ş‚±‚Æ‚Í‚Å‚«‚Ü‚¹‚ñB"};
+            var regEx = new RegularExpressionAttribute(@"^[^\\/:*?""<>|]*$") { ErrorMessage = "Ÿ‚Ì•¶š‚Íg‚¦‚Ü‚¹‚ñB\\ / : * ? < > |" };
             if (!regEx.IsValid(inputData.LabelName))
             {
                 errors.Add(new ValidationResult(regEx.ErrorMessage, new[] { nameof(LabelName) }));
