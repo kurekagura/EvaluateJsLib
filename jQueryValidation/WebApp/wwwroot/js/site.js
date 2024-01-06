@@ -1,4 +1,18 @@
-﻿/**
+﻿function focusOnValidationErrorInput(valErrors) {
+    // valErrorsが存在し、最初の要素が存在するか確認
+    if (valErrors && valErrors.length > 0) {
+        // 一つ目の memberNames を取り出す
+        var firstMemberName = valErrors[0].memberNames[0];
+
+        // その値の id を持つ input 要素を取得してフォーカス
+        var targetInput = document.getElementById(firstMemberName);
+        if (targetInput) {
+            targetInput.focus();
+        }
+    }
+}
+
+/**
  * jquery.validate.unobtrusive.jsを参考
  * @param {string} value - selectorの文字を適切にエスケープ（jQuery仕様）
  * @returns {string} - エスケープ済み

@@ -57,6 +57,8 @@
                             //         showValidationError($form, $inputElem, errorMessage);
                             //     });
                             // });
+                            //最初のエラーinputにフォーカスを当てる
+                            focusOnValidationErrorInput(valErrors);
                         }
                     }).catch(error => {
                         console.log('error', error);
