@@ -54,6 +54,7 @@
                     .then(result => {
                         if (result.status === 200) {
                             $sec.append(result.data);
+                            $('#LabelName').val('');
                         } else if (result.status === 202) {
                             showValidationErrorsVanilla($form.get(0), result.data);
                         }

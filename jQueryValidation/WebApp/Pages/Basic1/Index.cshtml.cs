@@ -8,11 +8,12 @@ namespace WebApp.Pages.Basic1
     {
         [BindProperty]
         [Required(ErrorMessage = "入力が必須です。")]
-        public string UserName { get; set; } = default!;
+        public string? UserName { get; set; } = default!;
 
         [BindProperty]
         [Range(minimum: 18, maximum: int.MaxValue, ErrorMessage = "18以上である必要があります。")]
-        public int Age { get; set; }
+        [Required(ErrorMessage = "入力が必須です。")]
+        public int? Age { get; set; } = default!;
 
         public void OnGet() { }
 

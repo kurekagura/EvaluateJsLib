@@ -10,22 +10,12 @@ namespace WebApp.Pages.Ajax
     {
         [BindProperty]
         //[Required(ErrorMessage = "入力が必須です。")]
-        //[PageRemote(
-        //    ErrorMessage = "登録済みのユーザー名です。"
-        //    )]
-        //[PageRemote(
-        //    ErrorMessage = "登録済みのユーザー名です。",
-        //    AdditionalFields = "__RequestVerificationToken",
-        //    HttpMethod = "post",
-        //    PageHandler = "CheckUserName"
-        //    )]
         public string? UserName { get; set; } = default!;
 
         [BindProperty]
         //[Range(minimum: 18, maximum: int.MaxValue, ErrorMessage = "18以上である必要があります。")]
+        //[Required(ErrorMessage = "入力が必須です。")]
         public int? Age { get; set; } = default!;
-
-        public Ajax1Model() { }
 
         public void OnGet() { }
 
@@ -34,7 +24,7 @@ namespace WebApp.Pages.Ajax
         /// </summary>
         /// <param name="inputData"></param>
         /// <returns></returns>
-        public JsonResult OnPostCheckUserName([FromBody] JsonPostData inputData)
+        public JsonResult OnPostCheckInputs([FromBody] JsonPostData inputData)
         {
             var list = new[] { "user1", "user2" };
 
@@ -53,6 +43,13 @@ namespace WebApp.Pages.Ajax
             }
             if (errors.Count > 0)
                 return new JsonResult(errors);
+
+            var range = new RangeAttribute(18, int.MaxValue) { ErrorMessage = "18以上である必要があります。" };
+            if (!range.IsValid(inputData.Age))
+            {
+                errors.Add(new ValidationResult(range.ErrorMessage, new[] { nameof(Age) }));
+                return new JsonResult(errors);
+            }
 
             if (list.Contains(inputData.UserName))
             {
