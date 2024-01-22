@@ -1,8 +1,6 @@
 ﻿@page
-@model WebApp.Pages.Crop.IndexModel
+@model WebApp.Pages.Mask.IndexModel
 @{
-}
-@section Heads{
     <style>
         .img-container {
             display: flex;
@@ -25,19 +23,19 @@
     </style>
 }
 
-<h1>Fabric.js(Crop)</h1>
-<p1>img要素を使わず、Imageを使う</p1>
+<h1>Fabric.js(Mask)</h1>
 
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            @* Crop前の画像用（img要素ではない） *@
+            @* Cオリジナル画像用（img要素ではない） *@
             <div id="IdCanvasDI" class="img-container">
                 <canvas id="IdCanvas"></canvas>
             </div>
         </div>
+
         <div class="col-md-6">
-            @* Crop後のプレビュー用 *@
+            @* Mask後のプレビュー用 *@
             <div class="img-container">
                 <img id="IdPreviewIM" class="img-origin" alt="preview image" />
             </div>
@@ -45,24 +43,15 @@
     </div>
 </div>
 
-<div>
-    <button id="IdResetBT">reset</button>
-</div>
-<div>
-    <button id="IdDestroyBT">destroy</button>
-</div>
-
 @section Scripts{
     <script>
-
         $(() => {
-
             //img要素を存在させない方法
             const img = new Image();
 
             //img.src = '@Url.Content("~/img/negi_green_onion600x300.png")';
             img.src = '@Url.Content("~/img/negi_green_onion300x600.png")';
-            
+
             $(img).on('load', function (e) {
                 console.log('load!');
 
@@ -108,57 +97,17 @@
 
                 canvas.add(fabImg); //canvasへFabricImage追加
 
-                var rect = new fabric.Rect({
-                    left: imgObj.width / 4,
-                    top: imgObj.height / 4,
-                    width: imgObj.width / 2,
-                    height: imgObj.height / 2,
-                    fill: 'transparent',
-                    stroke: 'red',
-                    strokeWidth: 1,
-                    strokeUniform: true,
-                    lockRotation: true
-                });
-                rect.setControlVisible('mtr', false); // 回転コントロールを非表示
-                canvas.add(rect);
+                // const rect = createMaskFabricRect(imgObj.width / 4, imgObj.height / 4, imgObj.width / 2, imgObj.height / 2);
+                // canvas.add(rect);
+                // rect.on('modified', (options) => onModifiedRect(options, imgObj, origin_width, origin_height, scale, $('#IdPreviewIM')));
+                // rect.fire('modified', { target: rect }); //初期化時にマニュアル発火
 
-                rect.on('modified', function (options) {
-                    console.log('modified');
-                    const t = options.target;
-                    console.log(t.aCoords);
-                    console.log(t.lineCoords);
-                    // const c = t.aCoords;
-                    const c = t.lineCoords;
-
-                    const left = c.tl.x;
-                    const top = c.tl.y;
-                    const width = c.tr.x - c.tl.x;
-                    const height = c.bl.y - c.tl.y;
-                    console.log(`left:${left},top:${top},width:${width},height:${height}`);
-
-                    //掛け値が重要
-                    const inv_scale = 1 / scale;
-                    console.log('inverse scale', inv_scale);
-                    const cropRect = { left: left * inv_scale, top: top * inv_scale, width: width * inv_scale, height: height * inv_scale };
-
-                    //Imageオブジェクトもimg要素と同じように扱える
-                    //const previewDataUrl = cropImage(imgElem, cropRect);
-                    const previewDataUrl = createCropImage(imgObj, origin_width, origin_height, cropRect);
-                    //img要素に設定
-                    $('#IdPreviewIM').attr('src', previewDataUrl);
-                    console.log('cropRect(サーバ取得時の原画基準)', cropRect);
-                });
-
-                //初期化時にマニュアル発火
-                rect.fire('modified', { target: rect });
+                const circle = createMaskFabricCircle(imgObj.width * (1 / 4), imgObj.height * (1 / 4), Math.min(imgObj.width, imgObj.height) / 4);
+                canvas.add(circle);
+                circle.on('modified', (options) => onModifiedCircle(options, imgObj, origin_width, origin_height, scale, $('#IdPreviewIM')));
+                circle.fire('modified', { target: circle }); //初期化時にマニュアル発火
             });
 
-            $('#IdDestroyBT').on('click', function () {
-                //cropper.destroy();
-            });
-            $('#IdResetBT').on('click', function () {
-                //cropper.reset();
-            });
         });
     </script>
 }
