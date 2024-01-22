@@ -3,7 +3,7 @@
     "http": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "Mask/Index",
+      "launchUrl": "Mask/Polygon",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

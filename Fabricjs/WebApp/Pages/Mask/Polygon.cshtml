@@ -1,0 +1,238 @@
+﻿@page
+@model WebApp.Pages.Mask.PolygonModel
+@{
+    <style>
+        .img-container {
+            display: flex;
+            /* flex-direction: row; */
+            justify-content: flex-start;
+            align-items: flex-start;
+            width: 300px; /* 画像のサイズ + 枠線の分 */
+            height: 300px; /* 画像のサイズ + 枠線の分 */
+            background: repeating-linear-gradient(45deg, #eee, #eee 2px, #fff 2px, #fff 4px);
+            /* background-size: 8px 8px; */
+        }
+
+        .img-origin {
+            /* This rule is very important, please don't ignore this for cropper.js */
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            /* border: 1px solid #000; */
+        }
+    </style>
+}
+
+<h1>Fabric.js(Mask-Polygon)</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            @* Cオリジナル画像用（img要素ではない） *@
+            <div id="IdCanvasDI" class="img-container">
+                <canvas id="IdCanvas"></canvas>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            @* Mask後のプレビュー用 *@
+            <div class="img-container">
+                <img id="IdPreviewIM" class="img-origin" alt="preview image" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function getObjectSizeWithStroke(object) {
+            var stroke = new fabric.Point(
+                object.strokeUniform ? 1 / object.scaleX : 1,
+                object.strokeUniform ? 1 / object.scaleY : 1
+            ).multiply(object.strokeWidth);
+            return new fabric.Point(object.width + stroke.x, object.height + stroke.y);
+        }
+
+        // define a function that will define what the control does
+        // this function will be called on every mouse move after a control has been
+        // clicked and is being dragged.
+        // The function receive as argument the mouse event, the current trasnform object
+        // and the current position in canvas coordinate
+        // transform.target is a reference to the current object being transformed,
+        function actionHandler(eventData, transform, x, y) {
+            var polygon = transform.target,
+                currentControl = polygon.controls[polygon.__corner],
+                mouseLocalPosition = polygon.toLocalPoint(new fabric.Point(x, y), 'center', 'center'),
+                polygonBaseSize = getObjectSizeWithStroke(polygon),
+                size = polygon._getTransformedDimensions(0, 0),
+                finalPointPosition = {
+                    x: mouseLocalPosition.x * polygonBaseSize.x / size.x + polygon.pathOffset.x,
+                    y: mouseLocalPosition.y * polygonBaseSize.y / size.y + polygon.pathOffset.y
+                };
+            polygon.points[currentControl.pointIndex] = finalPointPosition;
+            return true;
+        }
+
+        // define a function that can keep the polygon in the same position when we change its
+        // width/height/top/left.
+        function anchorWrapper(anchorIndex, fn) {
+            return function (eventData, transform, x, y) {
+                var fabricObject = transform.target,
+                    absolutePoint = fabric.util.transformPoint({
+                        x: (fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x),
+                        y: (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y),
+                    }, fabricObject.calcTransformMatrix()),
+                    actionPerformed = fn(eventData, transform, x, y),
+                    newDim = fabricObject._setPositionDimensions({}),
+                    polygonBaseSize = getObjectSizeWithStroke(fabricObject),
+                    newX = (fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x) / polygonBaseSize.x,
+                    newY = (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y) / polygonBaseSize.y;
+                fabricObject.setPositionByOrigin(absolutePoint, newX + 0.5, newY + 0.5);
+                return actionPerformed;
+            }
+        }
+
+        //以下 ポリゴン頂点をインタラクティブに編集するためにfunction 公式demoより　https://fabricjs.com/custom-controls-polygon
+        // define a function that can locate the controls.
+        // this function will be used both for drawing and for interaction.
+        function polygonPositionHandler(dim, finalMatrix, fabricObject) {
+            var x = (fabricObject.points[this.pointIndex].x - fabricObject.pathOffset.x),
+                y = (fabricObject.points[this.pointIndex].y - fabricObject.pathOffset.y);
+            return fabric.util.transformPoint(
+                { x: x, y: y },
+                fabric.util.multiplyTransformMatrices(
+                    fabricObject.canvas.viewportTransform,
+                    fabricObject.calcTransformMatrix()
+                )
+            );
+        }
+
+        function Edit(fabCanvas) {
+            // clone what are you copying since you
+            // may want copy and paste on different moment.
+            // and you do not want the changes happened
+            // later to reflect on the copy.
+            var poly = fabCanvas.getObjects()[1];
+            fabCanvas.setActiveObject(poly);
+            //poly.edit = !poly.edit;
+            poly.edit = true;
+            if (poly.edit) {
+                console.log("poly.edit", poly.edit)
+                var lastControl = poly.points.length - 1;
+                console.log("first", poly.points)
+                poly.cornerStyle = 'circle';
+                poly.cornerColor = 'rgba(0,0,255,0.5)';
+                poly.controls = poly.points.reduce(function (acc, point, index) {
+                    acc['p' + index] = new fabric.Control({
+                        positionHandler: polygonPositionHandler,
+                        actionHandler: anchorWrapper(index > 0 ? index - 1 : lastControl, actionHandler),
+                        actionName: 'modifyPolygon',
+                        pointIndex: index
+                    });
+                    return acc;
+                }, {});
+                console.log("end", poly.points)
+            } else {
+                poly.cornerColor = 'blue';
+                poly.cornerStyle = 'rect';
+                poly.controls = fabric.Object.prototype.controls;
+            }
+            poly.hasBorders = !poly.edit;
+            fabCanvas.requestRenderAll();
+        }
+
+        $(() => {
+            //img要素を存在させない方法
+            const img = new Image();
+
+            //img.src = '@Url.Content("~/img/negi_green_onion600x300.png")';
+            img.src = '@Url.Content("~/img/negi_green_onion300x600.png")';
+
+            $(img).on('load', function (e) {
+                console.log('load!');
+
+                //Imageオブジェクト
+                var imgObj = e.target;
+                console.log('受信画像サイズ', imgObj.width, imgObj.height);
+
+                //表示サイズ（ここではw:300, h:300）にフィットさせる拡大縮小率が必要
+                const origin_width = imgObj.width;
+                const origin_height = imgObj.height;
+                const scale = calcFitSquareRatio(origin_width, origin_height, 300);
+                console.log('アスペクトフィット', scale);
+                //サイズ変更
+                imgObj.width = imgObj.width * scale;
+                imgObj.height = imgObj.height * scale;
+                console.log('拡大縮小後（フィット）', imgObj.width, imgObj.height);
+
+                console.log(`${imgObj.width},${imgObj.height}`);
+
+                //img要素でなくImageの場合はclientWidth/clientHeightは0なので利用不可
+                const squareLen = Math.max(imgObj.width, imgObj.height);
+                console.log('squareLen', squareLen);
+
+                console.log(e.target);
+                var fabCanvas = new fabric.Canvas('IdCanvas');
+                console.log('fablic.Canvasの設定サイズ', imgObj.width, imgObj.height);
+                fabCanvas.setWidth(imgObj.width);
+                fabCanvas.setHeight(imgObj.height);
+                // var canvasContainer = document.getElementById('IdCanvasDI');
+
+                var fabImg = new fabric.Image(imgObj, {
+                    selectable: false,
+                    evented: false, //falseで十字カーソル抑制
+                    //fill: 'transparent',
+                    left: 0,
+                    top: 0
+                });
+
+                //縦長横長で違える。
+                if (imgObj.width > imgObj.height) {
+                    fabImg.scaleToWidth(squareLen);
+                } else {
+                    fabImg.scaleToHeight(squareLen);
+                }
+
+                fabCanvas.add(fabImg); //canvasへFabricImage追加
+
+                var coordinates = [];
+                fabCanvas.on('mouse:dblclick', (options) => {
+                    var pointer = fabCanvas.getPointer(options.e);
+                    var x = pointer.x;
+                    var y = pointer.y;
+                    // 座標を変数配列に追加
+                    coordinates.push({ x: x, y: y });
+                    console.log(coordinates);
+
+                    console.log("no click object")
+                    // Polygonオブジェクトを取得する
+                    var pastpoly = fabCanvas.item(0); // 取得するPolygonのインデックスに応じて変更してください
+                    if (pastpoly instanceof fabric.Polygon) {
+                        // Polygonオブジェクトを削除する
+                        fabCanvas.remove(pastpoly);
+                    }
+                    var polygon = new fabric.Polygon(coordinates, {
+                        fill: 'black',
+                        stroke: 'red',
+                        strokeWidth: 1,
+                        objectCaching: false,
+                        transparentCorners: false,
+                        cornerColor: 'blue',
+                        selectable: false,
+                        lockMovementX: true,
+                        lockMovementY: true,
+                        hasControls: true
+                    });
+                    fabCanvas.add(polygon);
+                    Edit(fabCanvas);
+                });
+
+                //マウスクリック時に編集モードが解除されないように(Plygonの時だけ有効)
+                fabCanvas.on('mouse:down', (options) => {
+                    Edit(fabCanvas);
+                });
+            });
+
+        });
+    </script>
+}

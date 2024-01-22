@@ -84,6 +84,8 @@
 
                 var fabImg = new fabric.Image(imgObj, {
                     selectable: false,
+                    evented: false, //十字カーソル抑制
+                    //fill: 'transparent',
                     left: 0,
                     top: 0
                 });
@@ -97,11 +99,13 @@
 
                 canvas.add(fabImg); //canvasへFabricImage追加
 
+                //rect版
                 // const rect = createMaskFabricRect(imgObj.width / 4, imgObj.height / 4, imgObj.width / 2, imgObj.height / 2);
                 // canvas.add(rect);
                 // rect.on('modified', (options) => onModifiedRect(options, imgObj, origin_width, origin_height, scale, $('#IdPreviewIM')));
                 // rect.fire('modified', { target: rect }); //初期化時にマニュアル発火
 
+                //circle版
                 const circle = createMaskFabricCircle(imgObj.width * (1 / 4), imgObj.height * (1 / 4), Math.min(imgObj.width, imgObj.height) / 4);
                 canvas.add(circle);
                 circle.on('modified', (options) => onModifiedCircle(options, imgObj, origin_width, origin_height, scale, $('#IdPreviewIM')));
