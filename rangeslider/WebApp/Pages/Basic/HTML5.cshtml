@@ -1,0 +1,54 @@
+﻿@page
+@model WebApp.Pages.Basic.HTML5Model
+@{
+}
+
+@section Heads{
+@*     <link rel="stylesheet" href="~/lib/rangeslider.js/dist/rangeslider.css" /> *@
+    <style>
+    </style>
+}
+
+<h1>HTML5の既定</h1>
+
+<div>
+    <div class="row">
+        <div class="col-2 text-end">
+            <span>1</span>
+        </div>
+        <div class="col-8 align-self-center">
+            <input id="IdRangeIN" type="range" min="1" max="9" step="1" value="7" class="form-range">
+        </div>
+        <div class="col-2 text-start">
+            <span>9</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-center">
+            <span class="fw-bold" id="IdRangeVal">7</span>
+        </div>
+    </div>
+</div>
+
+<button id="IdGetValBT">値を取得</button>
+
+@section Scripts{
+@*     <script src="~/lib/rangeslider.js/dist/rangeslider.min.js"></script> *@
+    <script>
+        $(() => {
+            function showRangeValue(position, value) {
+                console.log(position, value);
+                $('#IdRangeVal').text(value);
+            }
+            const $range = $('#IdRangeIN');
+            $range.on('change', function (e) {
+                $('#IdRangeVal').text($(e.target).val());
+            });
+          
+            $('#IdGetValBT').on('click', function (e) {
+                const val = $range.val();
+                console.log(val);
+            });
+        });
+    </script>
+}
