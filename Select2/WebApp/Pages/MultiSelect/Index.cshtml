@@ -1,0 +1,73 @@
+﻿@page
+@model WebApp.Pages.MultiSelect.IndexModel
+@{
+}
+
+<h1>select2(Multi-Select)</h1>
+
+<div>
+    <select id="IdSelect" name="states[]">
+        <option value="aaa">AAA</option>
+        <option value="bbb">BBB</option>
+        <option value="ccc">CCC</option>
+    </select>
+
+    <div>
+        <button id="IdChangeBT">切換え</button>
+        <button id="IdSelValBT">選択値取得</button>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var previousSelection = [];  // 初期状態で未選択
+
+        $(() => {
+            $sel = $('#IdSelect').select2(
+                {
+                    minimumResultsForSearch: -1,
+                    width: '300px',
+                    multiple: true
+                    //minimumResultsForSearch: 1
+                });
+
+            $sel.on('change', function (e) {
+                // var currentSelection = $(this).val();
+
+                // // 未選択になった値を取得
+                // var deselectedValues = previousSelection.filter(value => !currentSelection.includes(value));
+
+                // // 選択が変更されたときの処理
+                // console.log('新しい選択: ', currentSelection);
+
+                // // 現在の選択状態を保存
+                // previousSelection = currentSelection;
+
+                // if (currentSelection && currentSelection.length > 0) {
+                //     // 1つ以上の項目が選択されている場合の処理
+                //     console.log('選択された値: ', currentSelection);
+                // } else {
+                //     // 選択が必須の場合の処理
+                //     console.log('1つ以上の選択が必要です');
+                //     console.log('未選択になった値: ', deselectedValues, deselectedValues[0]);
+                //     const forceSelVal = deselectedValues[0];
+                //     //$('#IdSelect').val(deselectedValues).trigger('change');
+                //     //$(this).next('.select2').find('.select2-selection').focus();
+                // }
+            });
+
+            $sel.on('select2:unselect', function (e) {
+                const currentSelection = $(this).val();
+                console.log('新しい選択: ', currentSelection);
+                if (currentSelection.length === 0) {
+                    e.preventDefault();
+                }
+            });
+
+            $('#IdSelValBT').on('click', function () {
+                const selVals = $sel.val();
+                console.log('選択値', selVals);
+            });
+        });
+    </script>
+}
