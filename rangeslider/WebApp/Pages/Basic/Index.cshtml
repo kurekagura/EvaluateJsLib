@@ -1,0 +1,92 @@
+﻿@page
+@model WebApp.Pages.Basic.IndexModel
+@{
+}
+
+@section Heads{
+    <link rel="stylesheet" href="~/lib/rangeslider.js/dist/rangeslider.css" />
+    <style>
+        .rangeslider--horizontal {
+            height: 10px;
+            width: 100%;
+        }
+
+        .rangeslider__handle {
+            background: white;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            display: inline-block;
+            width: 26px;
+            height: 30px;
+            position: absolute;
+            background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjAiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMDAwMDAiIHN0b3Atb3BhY2l0eT0iMC4xIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g');
+            background-size: 100%;
+            background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, rgba(0, 0, 0, 0.1)));
+            background-image: -moz-linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.1));
+            background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.1));
+            background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.1));
+            -moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+            -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+            border-radius: 50%;
+        }
+    </style>
+}
+
+<h1>rangeslider.js基本</h1>
+
+<div>
+    <div class="row">
+        <div class="col-2 text-end">
+            <span>1</span>
+        </div>
+        <div class="col-8 align-self-center">
+            <input id="IdRangeIN" type="range" min="1" max="9" step="1" value="7" class="form-range">
+        </div>
+        <div class="col-2 text-start">
+            <span>9</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-center">
+            <span class="fw-bold" id="IdRangeVal">7</span>
+        </div>
+    </div>
+</div>
+
+<button id="IdGetValBT">値を取得</button>
+
+@section Scripts{
+    <script src="~/lib/rangeslider.js/dist/rangeslider.min.js"></script>
+    <script>
+        $(() => {
+            function showRangeValue(position, value) {
+                console.log(position, value);
+                $('#IdRangeVal').text(value);
+            }
+            const $range = $('#IdRangeIN');
+            $('input[type="range"]').rangeslider({
+                polyfill: false,
+                // Default CSS classes
+                rangeClass: 'rangeslider',
+                disabledClass: 'rangeslider--disabled',
+                horizontalClass: 'rangeslider--horizontal',
+                verticalClass: 'rangeslider--vertical',
+                fillClass: 'rangeslider__fill',
+                handleClass: 'rangeslider__handle',
+                // onInit: function () {
+                //     console.log(this);
+                //     // Set initial value in the span element
+                //     $('#IdRangeVal').text($('#myRange').val());
+                // },
+                onSlide: showRangeValue
+            });
+            $('#IdGetValBT').on('click', function (e) {
+                const val = $range.val();
+                console.log(val);
+            });
+        });
+    </script>
+}
